@@ -1,5 +1,6 @@
 package br.edu.ifpe.afogados.desplugai.controller;
 
+import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
 import br.edu.ifpe.afogados.desplugai.dto.UsuarioDTO;
 import br.edu.ifpe.afogados.desplugai.service.UsuarioService;
 import jakarta.validation.Valid;
@@ -42,5 +43,24 @@ public class UsuarioController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(usuarioService.buscarUsuario(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UsuarioDTO> atualizarUsuario(
+            @PathVariable Long id,
+            @RequestBody @Valid UsuarioDTO dto
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(usuarioService.atualizarUsuario(id, dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponseDTO> deletarUsuario(
+            @PathVariable Long id
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(usuarioService.deletarUsuario(id));
     }
 }
