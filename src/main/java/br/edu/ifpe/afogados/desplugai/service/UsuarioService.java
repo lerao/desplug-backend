@@ -1,10 +1,12 @@
 package br.edu.ifpe.afogados.desplugai.service;
 
+import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
 import br.edu.ifpe.afogados.desplugai.dto.UsuarioDTO;
 import br.edu.ifpe.afogados.desplugai.entity.Usuario;
 import br.edu.ifpe.afogados.desplugai.enums.StatusHomologacaoEnum;
 import br.edu.ifpe.afogados.desplugai.mapper.UsuarioMapper;
 import br.edu.ifpe.afogados.desplugai.repository.UsuarioRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -46,5 +48,26 @@ public class UsuarioService {
                         .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         return usuarioMapper.toDto(usuario);
+    }
+
+    public UsuarioDTO atualizarUsuario(Long id, UsuarioDTO usuarioDTO) {
+        Usuario usuarioCadastrado = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        usuarioCadastrado.setNome(usuarioDTO.getNome());
+        usuarioCadastrado = usuarioRepository.save(usuarioCadastrado);
+        return usuarioMapper.toDto(usuarioCadastrado);
+    }
+
+    public ApiResponseDTO deletarUsuario(Long id) {
+        Usuario usuarioCadastrado = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        usuarioRepository.delete(usuarioCadastrado);
+
+        return new ApiResponseDTO(
+                HttpStatus.OK.value(),
+                "Usuário deletado com sucesso"
+        );
     }
 }
