@@ -7,6 +7,9 @@ import br.edu.ifpe.afogados.desplugai.mapper.ProfessorAfiliacaoMapper;
 import br.edu.ifpe.afogados.desplugai.repository.ProfessorAfiliacaoRepository;
 import org.springframework.stereotype.Service;
 
+import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
+import org.springframework.http.HttpStatus;
+
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.*;
@@ -56,4 +59,40 @@ public class ProfessorAfiliacaoService {
 
         return professorAfiliacaoMapper.toDto(professorAfiliacao);
     }
+
+    public ProfessorAfiliacaoDTO atualizarProfessorAfiliacao(
+            Long id,
+            ProfessorAfiliacaoDTO professorAfiliacaoDTO
+    ) {
+        ProfessorAfiliacao professorAfiliacaoCadastrado =
+                professorAfiliacaoRepository.findById(id)
+                        .orElseThrow(() ->
+                                new RuntimeException("Afiliação do professor não encontrada")
+                        );
+
+        professorAfiliacaoCadastrado.setIdSecretaria(
+                professorAfiliacaoDTO.getIdSecretaria()
+        );
+
+        professorAfiliacaoCadastrado =
+                professorAfiliacaoRepository.save(professorAfiliacaoCadastrado);
+
+        return professorAfiliacaoMapper.toDto(professorAfiliacaoCadastrado);
+    }
+
+    public ApiResponseDTO deletarProfessorAfiliacao(Long id) {
+        ProfessorAfiliacao professorAfiliacaoCadastrado =
+                professorAfiliacaoRepository.findById(id)
+                        .orElseThrow(() ->
+                                new RuntimeException("Afiliação do professor não encontrada")
+                        );
+
+        professorAfiliacaoRepository.delete(professorAfiliacaoCadastrado);
+
+        return new ApiResponseDTO(
+                HttpStatus.OK.value(),
+                "Afiliação do professor deletada com sucesso"
+        );
+    }
+
 }

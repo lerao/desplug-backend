@@ -6,7 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
 import java.util.List;
 
 @RestController
@@ -43,4 +43,24 @@ public class ProfessorAfiliacaoController {
                 .status(HttpStatus.OK)
                 .body(professorAfiliacaoService.buscarProfessorAfiliacao(id));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProfessorAfiliacaoDTO> atualizarProfessorAfiliacao(
+            @PathVariable Long id,
+            @RequestBody @Valid ProfessorAfiliacaoDTO dto
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(professorAfiliacaoService.atualizarProfessorAfiliacao(id, dto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponseDTO> deletarProfessorAfiliacao(
+            @PathVariable Long id
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(professorAfiliacaoService.deletarProfessorAfiliacao(id));
+    }
+
 }
