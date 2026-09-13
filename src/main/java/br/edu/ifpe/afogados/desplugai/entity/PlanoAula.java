@@ -21,7 +21,7 @@ public class PlanoAula {
     @Column(nullable = false)
     private String titulo;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "MEDIUMTEXT")
     private String resumo;
 
     @Enumerated(EnumType.STRING)
@@ -44,10 +44,10 @@ public class PlanoAula {
     @Column(nullable = false)
     private String materiaisNecessarios;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "MEDIUMTEXT")
     private String metodologia;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "MEDIUMTEXT")
     private String criteriosAvaliacao;
 
     @Column(nullable = false)

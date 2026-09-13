@@ -27,6 +27,7 @@ public class PlanoAulaService {
         PlanoAula planoAula = planoAulaMapper.toEntity(planoAulaDTO);
         planoAula.setDataCriacao(Timestamp.from(Instant.now()));
         planoAula.setStatusPublicacao(StatusPublicacaoEnum.PENDENTE_MODERACAO);
+        planoAula.setVisualizacoes(0);
         PlanoAula planoAulaSalvo = planoAulaRepository.save(planoAula);
         return planoAulaMapper.toDto(planoAulaSalvo);
     }
