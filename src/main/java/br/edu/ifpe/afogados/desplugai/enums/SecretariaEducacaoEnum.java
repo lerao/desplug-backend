@@ -1,4 +1,8 @@
-package enums;
+package br.edu.ifpe.afogados.desplugai.enums;
 
-public enum SecretariaEducacaOEnum {
+public enum SecretariaEducacaoEnum {
+
+    MUNICIPAL,
+    ESTADUAL
+
 }
