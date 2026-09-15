@@ -10,4 +10,5 @@ import lombok.Setter;
 public class ApiResponseDTO {
     private Integer status;
     private String mensagem;
+
 }
