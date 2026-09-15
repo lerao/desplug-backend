@@ -1,5 +1,6 @@
 package br.edu.ifpe.afogados.desplugai.controller;
 
+import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
 import br.edu.ifpe.afogados.desplugai.dto.SecretariaEducacaoDTO;
 import br.edu.ifpe.afogados.desplugai.service.SecretariaEducacaoService;
 import jakarta.validation.Valid;
@@ -15,7 +16,9 @@ public class SecretariaEducacaoController {
 
     private final SecretariaEducacaoService secretariaEducacaoService;
 
-    public SecretariaEducacaoController(SecretariaEducacaoService secretariaEducacaoService) {
+    public SecretariaEducacaoController(
+            SecretariaEducacaoService secretariaEducacaoService
+    ) {
         this.secretariaEducacaoService = secretariaEducacaoService;
     }
 
@@ -25,14 +28,20 @@ public class SecretariaEducacaoController {
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(secretariaEducacaoService.salvarSecretariaEducacao(dto));
+                .body(
+                        secretariaEducacaoService
+                                .salvarSecretariaEducacao(dto)
+                );
     }
 
     @GetMapping
     public ResponseEntity<List<SecretariaEducacaoDTO>> listarSecretariasEducacao() {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(secretariaEducacaoService.listarSecretariasEducacao());
+                .body(
+                        secretariaEducacaoService
+                                .listarSecretariasEducacao()
+                );
     }
 
     @GetMapping("/{id}")
@@ -41,6 +50,34 @@ public class SecretariaEducacaoController {
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(secretariaEducacaoService.buscarSecretariaEducacao(id));
+                .body(
+                        secretariaEducacaoService
+                                .buscarSecretariaEducacao(id)
+                );
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<SecretariaEducacaoDTO> atualizarSecretariaEducacao(
+            @PathVariable Long id,
+            @RequestBody @Valid SecretariaEducacaoDTO dto
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(
+                        secretariaEducacaoService
+                                .atualizarSecretariaEducacao(id, dto)
+                );
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponseDTO> deletarSecretariaEducacao(
+            @PathVariable Long id
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(
+                        secretariaEducacaoService
+                                .deletarSecretariaEducacao(id)
+                );
     }
 }
