@@ -1,5 +1,6 @@
 package br.edu.ifpe.afogados.desplugai.entity;
 
+import br.edu.ifpe.afogados.desplugai.enums.FeedbackPraticoEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,8 +26,9 @@ public class FeedbackPratico {
     @Column(nullable = false)
     private String relatoExperiencia;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Integer avaliacaoGeral;
+    private FeedbackPraticoEnum avaliacaoGeral;
 
     @Column(nullable = false)
     private Integer fotosEvidencias;
