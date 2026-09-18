@@ -1,8 +1,7 @@
 package br.edu.ifpe.afogados.desplugai.dto;
 
+import br.edu.ifpe.afogados.desplugai.enums.FeedbackPraticoEnum;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -22,9 +21,7 @@ import java.sql.Timestamp;
 })
 @Getter
 @Setter
-public class
-
-FeedbackPraticoDTO {
+public class FeedbackPraticoDTO {
 
     private Long id;
 
@@ -38,9 +35,7 @@ FeedbackPraticoDTO {
     private String relatoExperiencia;
 
     @NotNull(message = "A avaliação geral é de preenchimento obrigatório.")
-    @Min(value = 1, message = "A avaliação geral deve ser no mínimo 1.")
-    @Max(value = 5, message = "A avaliação geral deve ser no máximo 5.")
-    private Integer avaliacaoGeral;
+    private FeedbackPraticoEnum avaliacaoGeral;
 
     @NotNull(message = "A quantidade de fotos/evidências é de preenchimento obrigatório.")
     private Integer fotosEvidencias;
