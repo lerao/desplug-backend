@@ -1,7 +1,5 @@
 package br.edu.ifpe.afogados.desplugai.entity;
 
-
-import br.edu.ifpe.afogados.desplugai.enums.PerfilGlobalEnum;
 import br.edu.ifpe.afogados.desplugai.enums.StatusAfiliacaoEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,11 +16,13 @@ public class ProfessorAfiliacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long idProfessor;
+    @ManyToOne
+    @JoinColumn(name = "id_professor", nullable = false)
+    private Usuario professor;
 
-    @Column(nullable = false)
-    private Long idSecretaria;
+    @ManyToOne
+    @JoinColumn(name = "id_secretaria", nullable = false)
+    private SecretariaEducacao secretaria;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -30,6 +30,7 @@ public class ProfessorAfiliacao {
 
     @Column(nullable = true)
     private Timestamp dataVinculacao;
-
-
 }
+
+
+

@@ -1,5 +1,7 @@
 package br.edu.ifpe.afogados.desplugai.dto;
 
+import br.edu.ifpe.afogados.desplugai.entity.SecretariaEducacao;
+import br.edu.ifpe.afogados.desplugai.entity.Usuario;
 import br.edu.ifpe.afogados.desplugai.enums.StatusAfiliacaoEnum;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.constraints.NotNull;
@@ -10,8 +12,8 @@ import java.sql.Timestamp;
 
 @JsonPropertyOrder({
         "id",
-        "idProfessor",
-        "idSecretaria",
+        "professor",
+        "secretaria",
         "status",
         "dataVinculacao"
 })
@@ -22,10 +24,10 @@ public class ProfessorAfiliacaoDTO {
     private Long id;
 
     @NotNull(message = "O professor é de preenchimento obrigatório.")
-    private Long idProfessor;
+    private Usuario professor;
 
     @NotNull(message = "A secretaria é de preenchimento obrigatório.")
-    private Long idSecretaria;
+    private SecretariaEducacao secretaria;
 
     private StatusAfiliacaoEnum status;
 
