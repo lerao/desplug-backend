@@ -2,6 +2,7 @@ package br.edu.ifpe.afogados.desplugai.dto;
 
 import br.edu.ifpe.afogados.desplugai.entity.HabilidadeBncc;
 import br.edu.ifpe.afogados.desplugai.entity.PlanoAula;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -18,6 +19,7 @@ public class HabilidadePlanoDTO {
 
     private Long id;
 
+    @JsonIgnore
     @NotNull(message = "O plano de aula é de preenchimento obrigatório.")
     private PlanoAula plano;
 

@@ -4,7 +4,7 @@ import br.edu.ifpe.afogados.desplugai.dto.HabilidadePlanoDTO;
 import br.edu.ifpe.afogados.desplugai.entity.HabilidadePlano;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = { PlanoAulaMapper.class })
 public interface HabilidadePlanoMapper {
 
     public HabilidadePlano toEntity(HabilidadePlanoDTO habilidadePlanoDTO);
