@@ -21,10 +21,10 @@ public class FavoritoDTO {
     private Long id;
 
     @NotNull(message = "O usuário do favorito é de preenchimento obrigatório.")
-    private UsuarioDTO idUsuario;
+    private UsuarioDTO usuario;
 
     @NotNull(message = "O plano do favorito é de preenchimento obrigatório.")
-    private PlanoAula idPlano;
+    private PlanoAulaDTO planoAula;
 
     private Timestamp dataRegistro;
 }

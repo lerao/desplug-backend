@@ -4,6 +4,7 @@ import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
 import br.edu.ifpe.afogados.desplugai.dto.FavoritoDTO;
 import br.edu.ifpe.afogados.desplugai.entity.Favorito;
 import br.edu.ifpe.afogados.desplugai.mapper.FavoritoMapper;
+import br.edu.ifpe.afogados.desplugai.mapper.PlanoAulaMapper;
 import br.edu.ifpe.afogados.desplugai.repository.FavoritoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,16 +18,18 @@ public class FavoritoService {
 
     private final FavoritoRepository favoritoRepository;
     private final FavoritoMapper favoritoMapper;
+    private final PlanoAulaMapper planoAulaMapper;
 
-    public FavoritoService(FavoritoRepository favoritoRepository, FavoritoMapper favoritoMapper) {
+    public FavoritoService(FavoritoRepository favoritoRepository, FavoritoMapper favoritoMapper, PlanoAulaMapper planoAulaMapper) {
         this.favoritoRepository = favoritoRepository;
         this.favoritoMapper = favoritoMapper;
+        this.planoAulaMapper = planoAulaMapper;
     }
 
     public FavoritoDTO salvarFavorito(FavoritoDTO favoritoDTO) {
         boolean jaFavoritado = favoritoRepository.existsByIdUsuarioAndIdPlano(
-                favoritoDTO.getIdUsuario(),
-                favoritoDTO.getIdPlano()
+                favoritoDTO.getUsuario().getId(),
+                favoritoDTO.getPlanoAula().getId()
         );
 
         if (jaFavoritado) {
@@ -61,7 +64,8 @@ public class FavoritoService {
         Favorito favoritoCadastrado = favoritoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Favorito não encontrado"));
 
-        favoritoCadastrado.setIdPlano(favoritoDTO.getIdPlano());
+
+        favoritoCadastrado.setPlanoAula(planoAulaMapper.toEntity(favoritoDTO.getPlanoAula()));
         favoritoCadastrado = favoritoRepository.save(favoritoCadastrado);
         return favoritoMapper.toDto(favoritoCadastrado);
     }
