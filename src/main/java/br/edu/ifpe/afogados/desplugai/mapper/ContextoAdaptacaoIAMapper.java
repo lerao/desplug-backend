@@ -4,10 +4,13 @@ import br.edu.ifpe.afogados.desplugai.dto.ContextoAdaptacaoIADTO;
 import br.edu.ifpe.afogados.desplugai.entity.ContextoAdaptacaoIA;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(
+        componentModel = "spring",
+        uses = { UsuarioMapper.class, PlanoAulaMapper.class }
+)
 public interface ContextoAdaptacaoIAMapper {
 
-    ContextoAdaptacaoIA toEntity(ContextoAdaptacaoIADTO dto);
+    public ContextoAdaptacaoIA toEntity(ContextoAdaptacaoIADTO dto);
 
-    ContextoAdaptacaoIADTO toDto(ContextoAdaptacaoIA entity);
+    public ContextoAdaptacaoIADTO toDto(ContextoAdaptacaoIA entity);
 }
