@@ -3,8 +3,12 @@ package br.edu.ifpe.afogados.desplugai.service;
 import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
 import br.edu.ifpe.afogados.desplugai.dto.ContextoAdaptacaoIADTO;
 import br.edu.ifpe.afogados.desplugai.entity.ContextoAdaptacaoIA;
+import br.edu.ifpe.afogados.desplugai.entity.PlanoAula;
+import br.edu.ifpe.afogados.desplugai.entity.Usuario;
 import br.edu.ifpe.afogados.desplugai.mapper.ContextoAdaptacaoIAMapper;
 import br.edu.ifpe.afogados.desplugai.repository.ContextoAdaptacaoIARepository;
+import br.edu.ifpe.afogados.desplugai.repository.PlanoAulaRepository;
+import br.edu.ifpe.afogados.desplugai.repository.UsuarioRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -15,20 +19,56 @@ public class ContextoAdaptacaoIAService {
 
     private final ContextoAdaptacaoIARepository contextoAdaptacaoIARepository;
     private final ContextoAdaptacaoIAMapper contextoAdaptacaoIAMapper;
+    private final UsuarioRepository usuarioRepository;
+    private final PlanoAulaRepository planoAulaRepository;
 
     public ContextoAdaptacaoIAService(
             ContextoAdaptacaoIARepository contextoAdaptacaoIARepository,
-            ContextoAdaptacaoIAMapper contextoAdaptacaoIAMapper
+            ContextoAdaptacaoIAMapper contextoAdaptacaoIAMapper,
+            UsuarioRepository usuarioRepository,
+            PlanoAulaRepository planoAulaRepository
     ) {
         this.contextoAdaptacaoIARepository = contextoAdaptacaoIARepository;
         this.contextoAdaptacaoIAMapper = contextoAdaptacaoIAMapper;
+        this.usuarioRepository = usuarioRepository;
+        this.planoAulaRepository = planoAulaRepository;
     }
 
     public ContextoAdaptacaoIADTO salvarContextoAdaptacaoIA(
             ContextoAdaptacaoIADTO contextoAdaptacaoIADTO
     ) {
+        Usuario professor = usuarioRepository
+                .findById(contextoAdaptacaoIADTO.getProfessor().getId())
+                .orElseThrow(() ->
+                        new RuntimeException("Professor não encontrado")
+                );
+
+        PlanoAula planoBase = null;
+
+        if (contextoAdaptacaoIADTO.getPlanoBase() != null) {
+            planoBase = planoAulaRepository
+                    .findById(contextoAdaptacaoIADTO.getPlanoBase().getId())
+                    .orElseThrow(() ->
+                            new RuntimeException("Plano de aula base não encontrado")
+                    );
+        }
+
+        PlanoAula planoGerado = null;
+
+        if (contextoAdaptacaoIADTO.getPlanoGerado() != null) {
+            planoGerado = planoAulaRepository
+                    .findById(contextoAdaptacaoIADTO.getPlanoGerado().getId())
+                    .orElseThrow(() ->
+                            new RuntimeException("Plano de aula gerado não encontrado")
+                    );
+        }
+
         ContextoAdaptacaoIA contextoAdaptacaoIA =
                 contextoAdaptacaoIAMapper.toEntity(contextoAdaptacaoIADTO);
+
+        contextoAdaptacaoIA.setProfessor(professor);
+        contextoAdaptacaoIA.setPlanoBase(planoBase);
+        contextoAdaptacaoIA.setPlanoGerado(planoGerado);
 
         ContextoAdaptacaoIA contextoAdaptacaoIASalvo =
                 contextoAdaptacaoIARepository.save(contextoAdaptacaoIA);
@@ -51,7 +91,9 @@ public class ContextoAdaptacaoIAService {
                 contextoAdaptacaoIARepository
                         .findById(id)
                         .orElseThrow(() ->
-                                new RuntimeException("Contexto de adaptação IA não encontrado")
+                                new RuntimeException(
+                                        "Contexto de adaptação IA não encontrado"
+                                )
                         );
 
         return contextoAdaptacaoIAMapper.toDto(contextoAdaptacaoIA);
@@ -62,22 +104,43 @@ public class ContextoAdaptacaoIAService {
             ContextoAdaptacaoIADTO contextoAdaptacaoIADTO
     ) {
         ContextoAdaptacaoIA contextoAdaptacaoIACadastrado =
-                contextoAdaptacaoIARepository.findById(id)
+                contextoAdaptacaoIARepository
+                        .findById(id)
                         .orElseThrow(() ->
-                                new RuntimeException("Contexto de adaptação IA não encontrado")
+                                new RuntimeException(
+                                        "Contexto de adaptação IA não encontrado"
+                                )
                         );
 
-        contextoAdaptacaoIACadastrado.setIdProfessor(
-                contextoAdaptacaoIADTO.getIdProfessor()
-        );
+        Usuario professor = usuarioRepository
+                .findById(contextoAdaptacaoIADTO.getProfessor().getId())
+                .orElseThrow(() ->
+                        new RuntimeException("Professor não encontrado")
+                );
 
-        contextoAdaptacaoIACadastrado.setIdPlanoBase(
-                contextoAdaptacaoIADTO.getIdPlanoBase()
-        );
+        PlanoAula planoBase = null;
 
-        contextoAdaptacaoIACadastrado.setIdPlanoGerado(
-                contextoAdaptacaoIADTO.getIdPlanoGerado()
-        );
+        if (contextoAdaptacaoIADTO.getPlanoBase() != null) {
+            planoBase = planoAulaRepository
+                    .findById(contextoAdaptacaoIADTO.getPlanoBase().getId())
+                    .orElseThrow(() ->
+                            new RuntimeException("Plano de aula base não encontrado")
+                    );
+        }
+
+        PlanoAula planoGerado = null;
+
+        if (contextoAdaptacaoIADTO.getPlanoGerado() != null) {
+            planoGerado = planoAulaRepository
+                    .findById(contextoAdaptacaoIADTO.getPlanoGerado().getId())
+                    .orElseThrow(() ->
+                            new RuntimeException("Plano de aula gerado não encontrado")
+                    );
+        }
+
+        contextoAdaptacaoIACadastrado.setProfessor(professor);
+        contextoAdaptacaoIACadastrado.setPlanoBase(planoBase);
+        contextoAdaptacaoIACadastrado.setPlanoGerado(planoGerado);
 
         contextoAdaptacaoIACadastrado.setMateriaisDisponiveis(
                 contextoAdaptacaoIADTO.getMateriaisDisponiveis()
@@ -115,9 +178,12 @@ public class ContextoAdaptacaoIAService {
 
     public ApiResponseDTO deletarContextoAdaptacaoIA(Long id) {
         ContextoAdaptacaoIA contextoAdaptacaoIACadastrado =
-                contextoAdaptacaoIARepository.findById(id)
+                contextoAdaptacaoIARepository
+                        .findById(id)
                         .orElseThrow(() ->
-                                new RuntimeException("Contexto de adaptação IA não encontrado")
+                                new RuntimeException(
+                                        "Contexto de adaptação IA não encontrado"
+                                )
                         );
 
         contextoAdaptacaoIARepository.delete(contextoAdaptacaoIACadastrado);

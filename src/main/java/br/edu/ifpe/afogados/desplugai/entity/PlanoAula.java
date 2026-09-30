@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Getter
 @Setter
@@ -50,6 +51,9 @@ public class PlanoAula {
     @Column(nullable = false, columnDefinition = "MEDIUMTEXT")
     private String criteriosAvaliacao;
 
+    @OneToMany(mappedBy = "plano", orphanRemoval = true)
+    private List<HabilidadePlano> habilidadesPlano;
+
     @Column(nullable = false)
     private String imagemCapa;
 
@@ -57,8 +61,9 @@ public class PlanoAula {
     @Column(nullable = false)
     private StatusPublicacaoEnum statusPublicacao;
 
-    @Column(nullable = false)
-    private String idAutor;
+    @ManyToOne
+    @JoinColumn(name = "id_autor", nullable = false)
+    private Usuario autor;
 
     @Column(nullable = false)
     public Boolean isGeradoIA;
@@ -66,8 +71,9 @@ public class PlanoAula {
     @Column(nullable = false)
     private Boolean isDerivado;
 
-    @Column(nullable = true)
-    private String idPlanoOrigem;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_plano_origem", nullable = true)
+    private PlanoAula planoOrigem;
 
     @Column(nullable = false)
     private Integer visualizacoes;

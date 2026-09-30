@@ -2,9 +2,13 @@ package br.edu.ifpe.afogados.desplugai.service;
 
 import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
 import br.edu.ifpe.afogados.desplugai.dto.HabilidadePlanoDTO;
+import br.edu.ifpe.afogados.desplugai.entity.HabilidadeBncc;
 import br.edu.ifpe.afogados.desplugai.entity.HabilidadePlano;
+import br.edu.ifpe.afogados.desplugai.entity.PlanoAula;
 import br.edu.ifpe.afogados.desplugai.mapper.HabilidadePlanoMapper;
+import br.edu.ifpe.afogados.desplugai.repository.HabilidadeBnccRepository;
 import br.edu.ifpe.afogados.desplugai.repository.HabilidadePlanoRepository;
+import br.edu.ifpe.afogados.desplugai.repository.PlanoAulaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -15,20 +19,41 @@ public class HabilidadePlanoService {
 
     private final HabilidadePlanoRepository habilidadePlanoRepository;
     private final HabilidadePlanoMapper habilidadePlanoMapper;
+    private final PlanoAulaRepository planoAulaRepository;
+    private final HabilidadeBnccRepository habilidadeBnccRepository;
 
     public HabilidadePlanoService(
             HabilidadePlanoRepository habilidadePlanoRepository,
-            HabilidadePlanoMapper habilidadePlanoMapper
+            HabilidadePlanoMapper habilidadePlanoMapper,
+            PlanoAulaRepository planoAulaRepository,
+            HabilidadeBnccRepository habilidadeBnccRepository
     ) {
         this.habilidadePlanoRepository = habilidadePlanoRepository;
         this.habilidadePlanoMapper = habilidadePlanoMapper;
+        this.planoAulaRepository = planoAulaRepository;
+        this.habilidadeBnccRepository = habilidadeBnccRepository;
     }
 
     public HabilidadePlanoDTO salvarHabilidadePlano(
             HabilidadePlanoDTO habilidadePlanoDTO
     ) {
+        PlanoAula plano = planoAulaRepository
+                .findById(habilidadePlanoDTO.getPlano().getId())
+                .orElseThrow(() ->
+                        new RuntimeException("Plano de aula não encontrado")
+                );
+
+        HabilidadeBncc habilidade = habilidadeBnccRepository
+                .findById(habilidadePlanoDTO.getHabilidade().getId())
+                .orElseThrow(() ->
+                        new RuntimeException("Habilidade BNCC não encontrada")
+                );
+
         HabilidadePlano habilidadePlano =
                 habilidadePlanoMapper.toEntity(habilidadePlanoDTO);
+
+        habilidadePlano.setPlano(plano);
+        habilidadePlano.setHabilidade(habilidade);
 
         HabilidadePlano habilidadePlanoSalvo =
                 habilidadePlanoRepository.save(habilidadePlano);
@@ -51,7 +76,9 @@ public class HabilidadePlanoService {
                 habilidadePlanoRepository
                         .findById(id)
                         .orElseThrow(() ->
-                                new RuntimeException("Habilidade do plano não encontrada")
+                                new RuntimeException(
+                                        "Habilidade do plano não encontrada"
+                                )
                         );
 
         return habilidadePlanoMapper.toDto(habilidadePlano);
@@ -62,18 +89,28 @@ public class HabilidadePlanoService {
             HabilidadePlanoDTO habilidadePlanoDTO
     ) {
         HabilidadePlano habilidadePlanoCadastrado =
-                habilidadePlanoRepository.findById(id)
+                habilidadePlanoRepository
+                        .findById(id)
                         .orElseThrow(() ->
-                                new RuntimeException("Habilidade do plano não encontrada")
+                                new RuntimeException(
+                                        "Habilidade do plano não encontrada"
+                                )
                         );
 
-        habilidadePlanoCadastrado.setIdPlano(
-                habilidadePlanoDTO.getIdPlano()
-        );
+        PlanoAula plano = planoAulaRepository
+                .findById(habilidadePlanoDTO.getPlano().getId())
+                .orElseThrow(() ->
+                        new RuntimeException("Plano de aula não encontrado")
+                );
 
-        habilidadePlanoCadastrado.setIdHabilidade(
-                habilidadePlanoDTO.getIdHabilidade()
-        );
+        HabilidadeBncc habilidade = habilidadeBnccRepository
+                .findById(habilidadePlanoDTO.getHabilidade().getId())
+                .orElseThrow(() ->
+                        new RuntimeException("Habilidade BNCC não encontrada")
+                );
+
+        habilidadePlanoCadastrado.setPlano(plano);
+        habilidadePlanoCadastrado.setHabilidade(habilidade);
 
         habilidadePlanoCadastrado =
                 habilidadePlanoRepository.save(habilidadePlanoCadastrado);
@@ -83,9 +120,12 @@ public class HabilidadePlanoService {
 
     public ApiResponseDTO deletarHabilidadePlano(Long id) {
         HabilidadePlano habilidadePlanoCadastrado =
-                habilidadePlanoRepository.findById(id)
+                habilidadePlanoRepository
+                        .findById(id)
                         .orElseThrow(() ->
-                                new RuntimeException("Habilidade do plano não encontrada")
+                                new RuntimeException(
+                                        "Habilidade do plano não encontrada"
+                                )
                         );
 
         habilidadePlanoRepository.delete(habilidadePlanoCadastrado);

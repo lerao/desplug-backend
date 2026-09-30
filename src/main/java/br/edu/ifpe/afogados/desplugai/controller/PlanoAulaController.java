@@ -63,4 +63,10 @@ public class PlanoAulaController {
                 .status(HttpStatus.OK)
                 .body(planoAulaService.deletarPlanoAula(id));
     }
+    @GetMapping("/usuario/{id}")
+    public ResponseEntity<List<PlanoAulaDTO>> listarPlanosAulaAutor(@PathVariable Long autorId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(planoAulaService.listarPlanosAulaAutor(autorId));
+    }
 }

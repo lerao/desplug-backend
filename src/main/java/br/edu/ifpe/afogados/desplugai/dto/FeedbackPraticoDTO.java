@@ -26,10 +26,10 @@ public class FeedbackPraticoDTO {
     private Long id;
 
     @NotNull(message = "O plano é de preenchimento obrigatório.")
-    private Long idPlano;
+    private PlanoAulaDTO plano;
 
     @NotNull(message = "O professor é de preenchimento obrigatório.")
-    private Long idProfessor;
+    private UsuarioDTO usuario;
 
     @NotBlank(message = "O relato da experiência é de preenchimento obrigatório.")
     private String relatoExperiencia;

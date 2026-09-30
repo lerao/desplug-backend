@@ -1,5 +1,7 @@
 package br.edu.ifpe.afogados.desplugai.dto;
 
+import br.edu.ifpe.afogados.desplugai.entity.PlanoAula;
+import br.edu.ifpe.afogados.desplugai.entity.Usuario;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -9,9 +11,9 @@ import java.time.LocalDateTime;
 
 @JsonPropertyOrder({
         "id",
-        "idProfessor",
-        "idPlanoBase",
-        "idPlanoGerado",
+        "professor",
+        "planoBase",
+        "planoGerado",
         "materiaisDisponiveis",
         "perfilTurma",
         "habilidadeFoco",
@@ -27,11 +29,11 @@ public class ContextoAdaptacaoIADTO {
     private Long id;
 
     @NotNull(message = "O professor é de preenchimento obrigatório.")
-    private Long idProfessor;
+    private Usuario professor;
 
-    private Long idPlanoBase;
+    private PlanoAula planoBase;
 
-    private Long idPlanoGerado;
+    private PlanoAula planoGerado;
 
     private String materiaisDisponiveis;
 

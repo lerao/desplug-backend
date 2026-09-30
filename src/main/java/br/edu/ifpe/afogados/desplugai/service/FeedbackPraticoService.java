@@ -4,6 +4,8 @@ import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
 import br.edu.ifpe.afogados.desplugai.dto.FeedbackPraticoDTO;
 import br.edu.ifpe.afogados.desplugai.entity.FeedbackPratico;
 import br.edu.ifpe.afogados.desplugai.mapper.FeedbackPraticoMapper;
+import br.edu.ifpe.afogados.desplugai.mapper.PlanoAulaMapper;
+import br.edu.ifpe.afogados.desplugai.mapper.UsuarioMapper;
 import br.edu.ifpe.afogados.desplugai.repository.FeedbackPraticoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,13 +19,19 @@ public class FeedbackPraticoService {
 
     private final FeedbackPraticoRepository feedbackPraticoRepository;
     private final FeedbackPraticoMapper feedbackPraticoMapper;
+    private final PlanoAulaMapper planoAulaMapper;
+    private final UsuarioMapper usuarioMapper;
 
     public FeedbackPraticoService(
             FeedbackPraticoRepository feedbackPraticoRepository,
-            FeedbackPraticoMapper feedbackPraticoMapper
+            FeedbackPraticoMapper feedbackPraticoMapper,
+            PlanoAulaMapper planoAulaMapper,
+            UsuarioMapper usuarioMapper
     ) {
         this.feedbackPraticoRepository = feedbackPraticoRepository;
         this.feedbackPraticoMapper = feedbackPraticoMapper;
+        this.planoAulaMapper =  planoAulaMapper;
+        this.usuarioMapper = usuarioMapper;
     }
 
     public FeedbackPraticoDTO salvarFeedbackPratico(
@@ -77,12 +85,12 @@ public class FeedbackPraticoService {
                                 )
                         );
 
-        feedbackPraticoCadastrado.setIdPlano(
-                feedbackPraticoDTO.getIdPlano()
+        feedbackPraticoCadastrado.setPlano(
+                planoAulaMapper.toEntity( feedbackPraticoDTO.getPlano())
         );
 
-        feedbackPraticoCadastrado.setIdProfessor(
-                feedbackPraticoDTO.getIdProfessor()
+        feedbackPraticoCadastrado.setUsuario(
+                usuarioMapper.toEntity(feedbackPraticoDTO.getUsuario())
         );
 
         feedbackPraticoCadastrado.setRelatoExperiencia(

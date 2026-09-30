@@ -1,16 +1,19 @@
 package br.edu.ifpe.afogados.desplugai.dto;
 
 
+import br.edu.ifpe.afogados.desplugai.entity.HabilidadePlano;
 import br.edu.ifpe.afogados.desplugai.enums.EtapaEnsinoEnum;
 import br.edu.ifpe.afogados.desplugai.enums.StatusPublicacaoEnum;
 import br.edu.ifpe.afogados.desplugai.enums.TipoAtividadeEnum;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @JsonPropertyOrder({
         "id",
@@ -69,12 +72,15 @@ public class PlanoAulaDTO {
     @NotBlank(message = "Os critérios de avaliação do plano de aula são de preenchimento obrigatório.")
     private String criteriosAvaliacao;
 
+    @NotEmpty(message = "As habilidades do Plano de Aula são obrigatórias.")
+    private List<HabilidadePlanoDTO> habilidadesPlano;
+
     private String imagemCapa;
 
     private StatusPublicacaoEnum statusPublicacao;
 
     @NotNull(message = "O autor do plano de aula é de preenchimento obrigatório.")
-    private String idAutor;
+    private UsuarioDTO autor;
 
     @NotNull(message = "É necessário informar se o plano é gerado por IA ou não.")
     public Boolean isGeradoIA;
@@ -82,7 +88,7 @@ public class PlanoAulaDTO {
     @NotNull(message = "É necessário informar se o plano é derivado de outro plano ou não.")
     private Boolean isDerivado;
 
-    private String idPlanoOrigem;
+    private PlanoAulaDTO planoOrigem;
 
     private Integer visualizacoes;
 

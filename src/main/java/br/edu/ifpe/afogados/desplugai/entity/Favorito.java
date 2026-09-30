@@ -15,11 +15,13 @@ public class Favorito {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long idUsuario;
+    @ManyToOne
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Usuario usuario;
 
-    @Column(nullable = false)
-    private Long idPlano;
+    @ManyToOne
+    @JoinColumn(name = "id_plano", nullable = false)
+    private PlanoAula planoAula;
 
     @Column(nullable = false)
     private Timestamp dataRegistro;

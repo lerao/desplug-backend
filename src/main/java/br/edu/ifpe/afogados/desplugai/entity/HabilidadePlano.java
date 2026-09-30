@@ -13,9 +13,11 @@ public class HabilidadePlano {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long idPlano;
+    @ManyToOne
+    @JoinColumn(name = "id_plano", nullable = false)
+    private PlanoAula plano;
 
-    @Column(nullable = false)
-    private Long idHabilidade;
+    @ManyToOne
+    @JoinColumn(name = "id_habilidade", nullable = false)
+    private HabilidadeBncc habilidade;
 }

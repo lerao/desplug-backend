@@ -15,12 +15,17 @@ public class ContextoAdaptacaoIA {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long idProfessor;
+    @ManyToOne
+    @JoinColumn(name = "id_professor", nullable = false)
+    private Usuario professor;
 
-    private Long idPlanoBase;
+    @ManyToOne
+    @JoinColumn(name = "id_plano_base")
+    private PlanoAula planoBase;
 
-    private Long idPlanoGerado;
+    @ManyToOne
+    @JoinColumn(name = "id_plano_gerado")
+    private PlanoAula planoGerado;
 
     private String materiaisDisponiveis;
 

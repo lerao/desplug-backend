@@ -4,7 +4,7 @@ import br.edu.ifpe.afogados.desplugai.dto.FeedbackPraticoDTO;
 import br.edu.ifpe.afogados.desplugai.entity.FeedbackPratico;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {PlanoAulaMapper.class, UsuarioMapper.class})
 public interface FeedbackPraticoMapper {
 
     public FeedbackPratico toEntity(
