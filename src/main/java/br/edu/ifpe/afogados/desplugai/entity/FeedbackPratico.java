@@ -17,11 +17,13 @@ public class FeedbackPratico {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long idPlano;
+    @ManyToOne
+    @JoinColumn(name = "id_plano", nullable = false)
+    private PlanoAula plano;
 
-    @Column(nullable = false)
-    private Long idProfessor;
+    @ManyToOne
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Usuario usuario;
 
     @Column(nullable = false)
     private String relatoExperiencia;
