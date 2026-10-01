@@ -1,14 +1,18 @@
 package br.edu.ifpe.afogados.desplugai.service;
 
+import br.edu.ifpe.afogados.desplugai.dto.AdaptacaoPlanoInput;
 import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
 import br.edu.ifpe.afogados.desplugai.dto.ContextoAdaptacaoIADTO;
+import br.edu.ifpe.afogados.desplugai.dto.PlanoAulaIAResponseDTO;
 import br.edu.ifpe.afogados.desplugai.entity.ContextoAdaptacaoIA;
 import br.edu.ifpe.afogados.desplugai.entity.PlanoAula;
 import br.edu.ifpe.afogados.desplugai.entity.Usuario;
 import br.edu.ifpe.afogados.desplugai.mapper.ContextoAdaptacaoIAMapper;
+import br.edu.ifpe.afogados.desplugai.mapper.PlanoAulaMapper;
 import br.edu.ifpe.afogados.desplugai.repository.ContextoAdaptacaoIARepository;
 import br.edu.ifpe.afogados.desplugai.repository.PlanoAulaRepository;
 import br.edu.ifpe.afogados.desplugai.repository.UsuarioRepository;
+import br.edu.ifpe.afogados.desplugai.service.ia.GeminiService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -19,35 +23,62 @@ public class ContextoAdaptacaoIAService {
 
     private final ContextoAdaptacaoIARepository contextoAdaptacaoIARepository;
     private final ContextoAdaptacaoIAMapper contextoAdaptacaoIAMapper;
+    private final PlanoAulaMapper planoAulaMapper;
     private final UsuarioRepository usuarioRepository;
     private final PlanoAulaRepository planoAulaRepository;
+
+    // Service que gera as adaptações
+    private final GeminiService geminiService;
 
     public ContextoAdaptacaoIAService(
             ContextoAdaptacaoIARepository contextoAdaptacaoIARepository,
             ContextoAdaptacaoIAMapper contextoAdaptacaoIAMapper,
+            PlanoAulaMapper planoAulaMapper,
             UsuarioRepository usuarioRepository,
-            PlanoAulaRepository planoAulaRepository
+            PlanoAulaRepository planoAulaRepository,
+            GeminiService geminiService
     ) {
         this.contextoAdaptacaoIARepository = contextoAdaptacaoIARepository;
         this.contextoAdaptacaoIAMapper = contextoAdaptacaoIAMapper;
+        this.planoAulaMapper = planoAulaMapper;
         this.usuarioRepository = usuarioRepository;
         this.planoAulaRepository = planoAulaRepository;
+        this.geminiService = geminiService;
+    }
+
+    public PlanoAulaIAResponseDTO gerarAdaptacaoIA(
+            Long idPLanoBase,
+            AdaptacaoPlanoInput adaptacaoPlanoInput
+    ) {
+
+        PlanoAula planoBase = planoAulaRepository
+                .findById(idPLanoBase)
+                .orElseThrow(() ->
+                        new RuntimeException("Plano de aula base não encontrado")
+                );
+
+        PlanoAulaIAResponseDTO respostaIA = geminiService.adaptarPlano(
+                planoAulaMapper.toDto(planoBase),
+                adaptacaoPlanoInput
+        );
+
+        return new PlanoAulaIAResponseDTO();
     }
 
     public ContextoAdaptacaoIADTO salvarContextoAdaptacaoIA(
             ContextoAdaptacaoIADTO contextoAdaptacaoIADTO
     ) {
         Usuario professor = usuarioRepository
-                .findById(contextoAdaptacaoIADTO.getProfessor().getId())
+                .findById(contextoAdaptacaoIADTO.getIdProfessor())
                 .orElseThrow(() ->
                         new RuntimeException("Professor não encontrado")
                 );
 
         PlanoAula planoBase = null;
 
-        if (contextoAdaptacaoIADTO.getPlanoBase() != null) {
+        if (contextoAdaptacaoIADTO.getIdPlanoBase() != null) {
             planoBase = planoAulaRepository
-                    .findById(contextoAdaptacaoIADTO.getPlanoBase().getId())
+                    .findById(contextoAdaptacaoIADTO.getIdPlanoBase())
                     .orElseThrow(() ->
                             new RuntimeException("Plano de aula base não encontrado")
                     );
@@ -113,16 +144,16 @@ public class ContextoAdaptacaoIAService {
                         );
 
         Usuario professor = usuarioRepository
-                .findById(contextoAdaptacaoIADTO.getProfessor().getId())
+                .findById(contextoAdaptacaoIADTO.getIdProfessor())
                 .orElseThrow(() ->
                         new RuntimeException("Professor não encontrado")
                 );
 
         PlanoAula planoBase = null;
 
-        if (contextoAdaptacaoIADTO.getPlanoBase() != null) {
+        if (contextoAdaptacaoIADTO.getIdPlanoBase() != null) {
             planoBase = planoAulaRepository
-                    .findById(contextoAdaptacaoIADTO.getPlanoBase().getId())
+                    .findById(contextoAdaptacaoIADTO.getIdPlanoBase())
                     .orElseThrow(() ->
                             new RuntimeException("Plano de aula base não encontrado")
                     );

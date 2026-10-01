@@ -1,7 +1,7 @@
 package br.edu.ifpe.afogados.desplugai.controller;
 
-import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
-import br.edu.ifpe.afogados.desplugai.dto.PlanoAulaDTO;
+import br.edu.ifpe.afogados.desplugai.dto.*;
+import br.edu.ifpe.afogados.desplugai.service.ContextoAdaptacaoIAService;
 import br.edu.ifpe.afogados.desplugai.service.PlanoAulaService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -15,9 +15,11 @@ import java.util.List;
 public class PlanoAulaController {
 
     private final PlanoAulaService planoAulaService;
+    private final ContextoAdaptacaoIAService contextoAdaptacaoIAService;
 
-    public PlanoAulaController(PlanoAulaService planoAulaService) {
+    public PlanoAulaController(PlanoAulaService planoAulaService, ContextoAdaptacaoIAService contextoAdaptacaoIAService) {
         this.planoAulaService = planoAulaService;
+        this.contextoAdaptacaoIAService = contextoAdaptacaoIAService;
     }
 
     @PostMapping
@@ -63,10 +65,21 @@ public class PlanoAulaController {
                 .status(HttpStatus.OK)
                 .body(planoAulaService.deletarPlanoAula(id));
     }
+
     @GetMapping("/usuario/{id}")
     public ResponseEntity<List<PlanoAulaDTO>> listarPlanosAulaAutor(@PathVariable Long autorId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(planoAulaService.listarPlanosAulaAutor(autorId));
+    }
+
+    @PostMapping("/{idPlanoBase}/adaptar")
+    public ResponseEntity<PlanoAulaIAResponseDTO> gerarAdaptacaoIA(
+            @PathVariable Long idPlanoBase,
+            @RequestBody @Valid AdaptacaoPlanoInput adaptacaoPlanoInput
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(contextoAdaptacaoIAService.gerarAdaptacaoIA(idPlanoBase, adaptacaoPlanoInput));
     }
 }
