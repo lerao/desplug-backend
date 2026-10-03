@@ -234,7 +234,6 @@ public class GeminiService {
                 o contexto informado pelo professor.
 
                 REGRAS:
-
                 - Preserve o objetivo pedagógico principal do plano original.
                 - Adapte a metodologia ao perfil da turma.
                 - Considere os materiais disponíveis.
@@ -244,8 +243,9 @@ public class GeminiService {
                 - Mantenha a coerência entre objetivo, metodologia e avaliação.
                 - Retorne somente os campos definidos no schema.
                 - Use a linguagem como se fosse o próprio professor escrevendo seu próprio plano, não mencione o professor com uma terceira pessoa.
-
-                PLANO DE AULA:
+                - Para cada habilidade da BNCC-Computação sugerida, retorne OBRIGATORIAMENTE código.
+                
+                PLANO DE AULA BASE:
 
                 Título: %s
 

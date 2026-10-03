@@ -74,7 +74,7 @@ public class PlanoAulaController {
     }
 
     @PostMapping("/{idPlanoBase}/adaptar")
-    public ResponseEntity<PlanoAulaIAResponseDTO> gerarAdaptacaoIA(
+    public ResponseEntity<PlanoAulaDTO> gerarAdaptacaoIA(
             @PathVariable Long idPlanoBase,
             @RequestBody @Valid AdaptacaoPlanoInput adaptacaoPlanoInput
     ) {
