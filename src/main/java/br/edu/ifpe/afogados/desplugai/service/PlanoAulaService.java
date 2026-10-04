@@ -3,6 +3,7 @@ package br.edu.ifpe.afogados.desplugai.service;
 import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
 import br.edu.ifpe.afogados.desplugai.dto.HabilidadePlanoDTO;
 import br.edu.ifpe.afogados.desplugai.dto.PlanoAulaDTO;
+import br.edu.ifpe.afogados.desplugai.dto.PlanoAulaReportDTO;
 import br.edu.ifpe.afogados.desplugai.entity.HabilidadeBncc;
 import br.edu.ifpe.afogados.desplugai.entity.HabilidadePlano;
 import br.edu.ifpe.afogados.desplugai.entity.PlanoAula;
@@ -15,16 +16,15 @@ import br.edu.ifpe.afogados.desplugai.repository.PlanoAulaRepository;
 import br.edu.ifpe.afogados.desplugai.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import org.springframework.stereotype.Service;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class PlanoAulaService {
@@ -189,34 +189,38 @@ public class PlanoAulaService {
     public byte[] gerarPdf(Long idPlano) {
         PlanoAula planoAula = planoAulaRepository
                 .findById(idPlano)
-                .orElseThrow(() -> new RuntimeException("Plano de aula não encontrado."));
+                .orElseThrow(() -> new RuntimeException("Plano de aula não encontrado com ID: " + idPlano));
 
-        InputStream inputStream =
-                getClass().getResourceAsStream(
-                        "/reports/planoAula.jasper"
-                );
-        try {
-            JasperReport jasperReport =
-                    (JasperReport) JRLoader.loadObject(inputStream);
+        PlanoAulaReportDTO dto = new PlanoAulaReportDTO();
+        dto.setTitulo(planoAula.getTitulo());
+        dto.setTipoAtividade(planoAula.getTipoAtividade().getDescricao());
+        dto.setEtapaEnsino(planoAula.getEtapaEnsino().getDescricao());
+        dto.setAnosIndicados(planoAula.getAnosIndicados());
+        dto.setDuracao(planoAula.getDuracao());
 
+        JRBeanCollectionDataSource dataSource =
+                new JRBeanCollectionDataSource(Collections.singletonList(dto));
+
+        try (InputStream inputStream = getClass().getResourceAsStream("/reports/planoAula.jrxml")) {
+            if (inputStream == null) {
+                throw new FileNotFoundException("Template '/reports/planoAula.jrxml' não encontrado.");
+            }
+
+            JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
+
+            // Parâmetros do relatório (pode ser usado para dados gerais como logotipo)
             Map<String, Object> parametros = new HashMap<>();
-            parametros.put("titulo", planoAula.getTitulo());
-            parametros.put("tipoAtividade", planoAula.getTipoAtividade().getDescricao());
-            parametros.put("etapaEnsino", planoAula.getEtapaEnsino().getDescricao());
-            parametros.put("anosIndicados", planoAula.getAnosIndicados());
-            parametros.put("duracao", planoAula.getDuracao());
 
-            JasperPrint jasperPrint =
-                    JasperFillManager.fillReport(
-                            jasperReport,
-                            parametros,
-                            new JREmptyDataSource()
-                    );
+            JasperPrint jasperPrint = JasperFillManager.fillReport(
+                    jasperReport,
+                    parametros,
+                    dataSource
+            );
 
             return JasperExportManager.exportReportToPdf(jasperPrint);
-        } catch(Throwable e) {
-            e.printStackTrace();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao gerar PDF do plano de aula", e);
         }
-        return new byte[0];
     }
 }

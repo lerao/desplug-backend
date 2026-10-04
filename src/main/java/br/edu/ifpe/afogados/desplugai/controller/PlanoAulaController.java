@@ -4,7 +4,9 @@ import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
 import br.edu.ifpe.afogados.desplugai.dto.PlanoAulaDTO;
 import br.edu.ifpe.afogados.desplugai.service.PlanoAulaService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,9 +74,12 @@ public class PlanoAulaController {
 
     @GetMapping("/{id}/pdf")
     public ResponseEntity<byte[]> gerarPdf(@PathVariable Long id) {
-            byte[] pdf = planoAulaService.gerarPdf(id);
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(pdf);
+        byte[] pdf = planoAulaService.gerarPdf(id);
+
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"plano-de-aula-" + id + ".pdf\"")
+                .body(pdf);
     }
 }
