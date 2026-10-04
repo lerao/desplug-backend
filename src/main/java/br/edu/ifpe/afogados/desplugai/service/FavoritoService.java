@@ -27,7 +27,7 @@ public class FavoritoService {
     }
 
     public FavoritoDTO salvarFavorito(FavoritoDTO favoritoDTO) {
-        boolean jaFavoritado = favoritoRepository.existsByIdUsuarioAndIdPlano(
+        boolean jaFavoritado = favoritoRepository.existsByUsuario_IdAndPlanoAula_Id(
                 favoritoDTO.getUsuario().getId(),
                 favoritoDTO.getPlanoAula().getId()
         );
