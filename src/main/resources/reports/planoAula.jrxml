@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="planoAula" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="66dc3c44-d135-4991-af18-3cc9081a5ae1">
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="titulo" class="java.lang.String"/>
+	<field name="tipoAtividade" class="java.lang.String"/>
+	<field name="etapaEnsino" class="java.lang.String"/>
+	<field name="anosIndicados" class="java.lang.String"/>
+	<field name="duracao" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="86" splitType="Stretch">
+			<staticText>
+				<reportElement x="180" y="16" width="200" height="30" uuid="85ab9789-ba83-4ac5-aa50-1103b0f4b9b2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Plano de Aula]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="172" splitType="Stretch">
+			<textField>
+				<reportElement x="30" y="0" width="545" height="20" uuid="3e153dca-3310-432b-bd02-a94b880ed7d0">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="16"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{titulo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="-20" y="0" width="50" height="20" uuid="2e378f40-2307-4e50-8391-f0aa0e0fcfa5">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="16"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Título:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-20" y="30" width="140" height="20" uuid="86fb9ddb-31bb-4a65-a6c0-3f8466b283b6">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="16"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Tipo de Atividade:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="120" y="30" width="455" height="20" uuid="05692e74-d8c6-459c-9007-e1b5a71e3f55">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="16"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipoAtividade}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="-20" y="60" width="130" height="20" uuid="f95ff8a4-af06-4e58-83bf-0c998e7d78f2">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="16"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Etapa de Ensino:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="110" y="60" width="170" height="20" uuid="6d31b788-e3a4-4cdd-83ca-911af1d3fe72">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="16"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{etapaEnsino}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="280" y="60" width="120" height="20" uuid="719c3c22-9120-4d34-816f-2e2573075e99">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="16"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Anos Indicados:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="400" y="60" width="175" height="20" uuid="0b225b65-6f67-4284-a713-3cb1d62e6561">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="16"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{anosIndicados}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="-20" y="90" width="70" height="20" uuid="4e9c985c-a144-4d70-ad70-2f5ab35433a7">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="16"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Duração:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="50" y="90" width="230" height="20" uuid="0d3af01a-77e8-4fb2-bfc6-bc05e789fd64">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="16"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{duracao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="179" splitType="Stretch"/>
+	</pageFooter>
+</jasperReport>

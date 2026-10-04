@@ -69,4 +69,12 @@ public class PlanoAulaController {
                 .status(HttpStatus.OK)
                 .body(planoAulaService.listarPlanosAulaAutor(autorId));
     }
+
+    @GetMapping("/{id}/pdf")
+    public ResponseEntity<byte[]> gerarPdf(@PathVariable Long id) {
+            byte[] pdf = planoAulaService.gerarPdf(id);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(pdf);
+    }
 }

@@ -14,12 +14,17 @@ import br.edu.ifpe.afogados.desplugai.repository.HabilidadePlanoRepository;
 import br.edu.ifpe.afogados.desplugai.repository.PlanoAulaRepository;
 import br.edu.ifpe.afogados.desplugai.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.util.JRLoader;
 import org.springframework.stereotype.Service;
 
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PlanoAulaService {
@@ -179,5 +184,39 @@ public class PlanoAulaService {
                 .map(planoAulaMapper::toDto)
                 .toList();
 
+    }
+
+    public byte[] gerarPdf(Long idPlano) {
+        PlanoAula planoAula = planoAulaRepository
+                .findById(idPlano)
+                .orElseThrow(() -> new RuntimeException("Plano de aula não encontrado."));
+
+        InputStream inputStream =
+                getClass().getResourceAsStream(
+                        "/reports/planoAula.jasper"
+                );
+        try {
+            JasperReport jasperReport =
+                    (JasperReport) JRLoader.loadObject(inputStream);
+
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("titulo", planoAula.getTitulo());
+            parametros.put("tipoAtividade", planoAula.getTipoAtividade().getDescricao());
+            parametros.put("etapaEnsino", planoAula.getEtapaEnsino().getDescricao());
+            parametros.put("anosIndicados", planoAula.getAnosIndicados());
+            parametros.put("duracao", planoAula.getDuracao());
+
+            JasperPrint jasperPrint =
+                    JasperFillManager.fillReport(
+                            jasperReport,
+                            parametros,
+                            new JREmptyDataSource()
+                    );
+
+            return JasperExportManager.exportReportToPdf(jasperPrint);
+        } catch(Throwable e) {
+            e.printStackTrace();
+        }
+        return new byte[0];
     }
 }
