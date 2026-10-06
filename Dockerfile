@@ -7,6 +7,6 @@ RUN mvn clean package -Pprod -DskipTests
 # Stage 2: Runtime
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
-COPY --from=builder /app/target/q-projetos-*.jar app.jar
+COPY --from=builder /app/target/desplugai-*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
