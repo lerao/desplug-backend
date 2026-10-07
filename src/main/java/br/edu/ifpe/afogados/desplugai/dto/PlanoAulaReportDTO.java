@@ -19,4 +19,8 @@ public class PlanoAulaReportDTO {
     private String etapaEnsino;
     private String anosIndicados;
     private String duracao;
+    private String componentesCurriculares;
+    private String materiaisNecessarios;
+    private String metodologia;
+    private String criteriosAvaliacao;
 }

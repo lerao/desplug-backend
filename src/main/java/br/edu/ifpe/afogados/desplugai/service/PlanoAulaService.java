@@ -17,7 +17,7 @@ import br.edu.ifpe.afogados.desplugai.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.util.JRLoader;
+//import net.sf.jasperreports.engine.util.JRLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.FileNotFoundException;
@@ -197,6 +197,10 @@ public class PlanoAulaService {
         dto.setEtapaEnsino(planoAula.getEtapaEnsino().getDescricao());
         dto.setAnosIndicados(planoAula.getAnosIndicados());
         dto.setDuracao(planoAula.getDuracao());
+        dto.setComponentesCurriculares(planoAula.getComponentesCurriculares());
+        dto.setMateriaisNecessarios(planoAula.getMateriaisNecessarios());
+        dto.setMetodologia(planoAula.getMetodologia());
+        dto.setCriteriosAvaliacao(planoAula.getCriteriosAvaliacao());
 
         JRBeanCollectionDataSource dataSource =
                 new JRBeanCollectionDataSource(Collections.singletonList(dto));

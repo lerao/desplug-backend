@@ -6,10 +6,14 @@
 	<field name="etapaEnsino" class="java.lang.String"/>
 	<field name="anosIndicados" class="java.lang.String"/>
 	<field name="duracao" class="java.lang.String"/>
+	<field name="componentesCurriculares" class="java.lang.String"/>
+	<field name="materiaisNecessarios" class="java.lang.String"/>
+	<field name="metodologia" class="java.lang.String"/>
+	<field name="criteriosAvaliacao" class="java.lang.String"/>
 	<background splitType="Stretch"/>
 	<title height="79" splitType="Stretch"/>
 	<detail>
-		<band height="200" splitType="Stretch">
+		<band height="470" splitType="Stretch">
 			<element kind="staticText" uuid="07468c2a-c0e3-4d2a-9a4d-dbc454b45510" x="-20" y="0" width="50" height="30" fontName="Arial" fontSize="14.0" bold="true" vTextAlign="Middle">
 				<paragraph leftIndent="5"/>
 				<text><![CDATA[Título:]]></text>
@@ -26,9 +30,10 @@
 				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 			</element>
 			<element kind="textField" uuid="2e294bc8-983b-4951-b12e-2caafb66f40d" x="110" y="30" width="465" height="30" fontName="Arial" fontSize="14.0" vTextAlign="Middle">
-				<paragraph leftIndent="5"/>
+				<paragraph leftIndent="5" rightIndent="5"/>
 				<expression><![CDATA[$F{tipoAtividade}]]></expression>
 				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 			</element>
 			<element kind="staticText" uuid="cabcc0a5-3592-4bf1-a994-0fd8d6ca3d14" x="-20" y="60" width="122" height="30" fontName="Arial" fontSize="14.0" bold="true" vTextAlign="Middle">
 				<paragraph leftIndent="5"/>
@@ -37,9 +42,10 @@
 				<property name="com.jaspersoft.studio.unit.width" value="px"/>
 			</element>
 			<element kind="textField" uuid="577c9f36-7cdd-4e63-bff8-1e55a69e1946" x="102" y="60" width="473" height="30" fontName="Arial" fontSize="14.0" vTextAlign="Middle">
-				<paragraph leftIndent="5"/>
+				<paragraph leftIndent="5" rightIndent="5"/>
 				<expression><![CDATA[$F{etapaEnsino}]]></expression>
 				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
 			</element>
 			<element kind="staticText" uuid="2c2b0c9b-63f2-4815-93af-cfa812f000ed" x="-20" y="90" width="116" height="30" fontName="Arial" fontSize="14.0" bold="true" vTextAlign="Middle">
 				<paragraph leftIndent="5"/>
@@ -59,12 +65,68 @@
 				<property name="com.jaspersoft.studio.unit.width" value="px"/>
 			</element>
 			<element kind="textField" uuid="1191b11f-7717-4d36-8ab1-f5fbd5f5e29b" x="350" y="90" width="225" height="30" fontName="Arial" fontSize="14.0" vTextAlign="Middle">
-				<paragraph leftIndent="5"/>
+				<paragraph leftIndent="5" rightIndent="5"/>
 				<expression><![CDATA[$F{duracao}]]></expression>
 				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+			</element>
+			<element kind="staticText" uuid="b4e7f9d2-9650-4092-98f3-47820ebcccfa" x="-20" y="120" width="190" height="30" fontName="Arial" fontSize="14.0" bold="true" vTextAlign="Middle">
+				<paragraph leftIndent="5"/>
+				<text><![CDATA[Componentes Curriculares:]]></text>
+				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			</element>
+			<element kind="textField" uuid="894078f0-b4c5-4019-9265-733cbbad8bf4" x="170" y="120" width="404" height="30" fontName="Arial" fontSize="14.0" vTextAlign="Middle">
+				<paragraph leftIndent="5" rightIndent="5"/>
+				<expression><![CDATA[$F{componentesCurriculares}]]></expression>
+				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+			</element>
+			<element kind="staticText" uuid="8f2bd06c-18e8-4883-b2fa-84fea21adcd5" x="-20" y="150" width="160" height="30" fontName="Arial" fontSize="14.0" bold="true" vTextAlign="Middle">
+				<paragraph leftIndent="5"/>
+				<text><![CDATA[Materiais Necessários:]]></text>
+				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			</element>
+			<element kind="textField" uuid="731b9705-d7d9-49c0-87ea-8f333f90145b" x="-20" y="180" width="594" height="50" fontName="Arial" fontSize="14.0" hTextAlign="Justified" vTextAlign="Top">
+				<paragraph leftIndent="5" rightIndent="5"/>
+				<expression><![CDATA[$F{materiaisNecessarios}]]></expression>
+				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+			</element>
+			<element kind="staticText" uuid="22022607-3ab5-4e39-a426-71c0d26893d6" x="-20" y="230" width="160" height="30" fontName="Arial" fontSize="14.0" bold="true" vTextAlign="Middle">
+				<paragraph leftIndent="5"/>
+				<text><![CDATA[Metodologia:]]></text>
+				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			</element>
+			<element kind="textField" uuid="dd38277b-e954-4226-89b5-0187db6f6b38" x="-20" y="260" width="594" height="90" markup="styled" fontName="Arial" fontSize="14.0" hTextAlign="Justified" vTextAlign="Top">
+				<paragraph firstLineIndent="0" leftIndent="5" rightIndent="5"/>
+				<expression><![CDATA[$F{metodologia}]]></expression>
+				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
+				<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+			</element>
+			<element kind="staticText" uuid="43f21e76-cec1-41d1-8b2b-c92e057f4dd3" x="-20" y="350" width="160" height="30" fontName="Arial" fontSize="14.0" bold="true" vTextAlign="Middle">
+				<paragraph leftIndent="5"/>
+				<text><![CDATA[Critérios de Avaliação:]]></text>
+				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			</element>
+			<element kind="textField" uuid="ff8e7f09-bc9f-481e-b09e-6685926c26f5" x="-20" y="380" width="594" height="90" markup="styled" fontName="Arial" fontSize="14.0" hTextAlign="Justified" vTextAlign="Top">
+				<paragraph firstLineIndent="5" leftIndent="5"/>
+				<expression><![CDATA[$F{criteriosAvaliacao}]]></expression>
+				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
 			</element>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 		</band>
 	</detail>
-	<pageFooter height="54" splitType="Stretch"/>
+	<pageFooter height="54" splitType="Stretch">
+		<element kind="staticText" uuid="90a7054c-3e1d-48bb-9fd9-6cad7b5e8275" x="-20" y="0" width="100" height="30" fontName="Arial" fontSize="8.0" bold="true">
+			<paragraph leftIndent="5"/>
+			<text><![CDATA[Gerado por DesplugAI]]></text>
+			<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+		</element>
+	</pageFooter>
 </jasperReport>
