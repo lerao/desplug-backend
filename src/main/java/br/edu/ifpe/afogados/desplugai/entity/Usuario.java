@@ -26,9 +26,10 @@ public class Usuario {
     @Column(nullable = false)
     private String senha;
 
-    @Enumerated(EnumType.STRING)
+    /*@Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PerfilGlobalEnum perfilGlobal;
+    REMOVIDO: private PerfilGlobalEnum perfilGlobal;
+    O mapeamento de perfis agora é gerenciado pela entidade PerfilUsuario.*/
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

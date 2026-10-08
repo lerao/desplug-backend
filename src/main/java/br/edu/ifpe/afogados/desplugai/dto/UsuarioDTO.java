@@ -11,13 +11,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @JsonPropertyOrder({
         "id",
         "nome",
         "email",
         "senha",
-        "perfilGlobal",
+        "perfisUsuario",
         "statusHomologacao",
         "dataRegistro",
         "dataHomologacao",
@@ -39,8 +40,8 @@ public class UsuarioDTO {
     @NotBlank(message = "A senha do usuário é de preenchimento obrigatório.")
     private String senha;
 
-    @NotNull(message = "O perfil global do usuário é de preenchimento obrigatório.")
-    private PerfilGlobalEnum perfilGlobal;
+    @NotNull(message = "O(s) perfil(is) do usuário é de preenchimento obrigatório.")
+    private List<PerfilUsuarioDTO> perfisUsuario;
 
     private StatusHomologacaoEnum statusHomologacao;
 
