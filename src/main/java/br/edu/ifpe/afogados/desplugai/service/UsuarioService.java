@@ -9,7 +9,9 @@ import br.edu.ifpe.afogados.desplugai.enums.StatusHomologacaoEnum;
 import br.edu.ifpe.afogados.desplugai.mapper.UsuarioMapper;
 import br.edu.ifpe.afogados.desplugai.repository.PerfilUsuarioRepository;
 import br.edu.ifpe.afogados.desplugai.repository.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -22,16 +24,20 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final PerfilUsuarioRepository perfilUsuarioRepository;
     private final UsuarioMapper usuarioMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, PerfilUsuarioRepository perfilUsuarioRepository, UsuarioMapper usuarioMapper) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PerfilUsuarioRepository perfilUsuarioRepository, UsuarioMapper usuarioMapper, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.perfilUsuarioRepository = perfilUsuarioRepository;
         this.usuarioMapper = usuarioMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional
     public UsuarioDTO salvarUsuario(UsuarioDTO usuarioDTO) {
 
         Usuario usuario = usuarioMapper.toEntity(usuarioDTO);
+        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         usuario.setDataRegistro(Timestamp.from(Instant.now()));
         usuario.setStatusHomologacao(StatusHomologacaoEnum.PENDENTE);
         Usuario usuarioSalvo = usuarioRepository.save(usuario);
