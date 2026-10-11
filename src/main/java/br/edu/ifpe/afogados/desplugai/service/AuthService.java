@@ -55,12 +55,20 @@ public class AuthService {
         }
 
         SessaoUsuario sessaoUsuario = new SessaoUsuario();
+
+        String token = tokenService.gerarToken();
+
         sessaoUsuario.setUsuario(usuario);
-        sessaoUsuario.setToken(tokenService.gerarToken());
+        sessaoUsuario.setToken(tokenService.gerarHash(token));
         sessaoUsuario.setPerfilAtivo(dto.getPerfil());
-        sessaoUsuario.setDataCriacao(LocalDateTime.now());
-        sessaoUsuario.setDataExpiracao(LocalDateTime.now().plusHours(6));
+
+        LocalDateTime agora = LocalDateTime.now();
+
+        sessaoUsuario.setDataCriacao(agora);
+        sessaoUsuario.setDataExpiracao(agora.plusHours(6));
+
         sessaoUsuarioRepository.save(sessaoUsuario);
+        sessaoUsuario.setToken(token); // token a ser exibido ao usuário, ao invés do hash
 
         return sessaoUsuarioMapper.toDto(sessaoUsuario);
     }
