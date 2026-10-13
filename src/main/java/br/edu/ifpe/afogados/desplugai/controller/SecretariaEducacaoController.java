@@ -2,6 +2,8 @@ package br.edu.ifpe.afogados.desplugai.controller;
 
 import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
 import br.edu.ifpe.afogados.desplugai.dto.SecretariaEducacaoDTO;
+import br.edu.ifpe.afogados.desplugai.enums.PerfilGlobalEnum;
+import br.edu.ifpe.afogados.desplugai.security.PerfisPermitidos;
 import br.edu.ifpe.afogados.desplugai.service.SecretariaEducacaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,6 +35,10 @@ public class SecretariaEducacaoController {
         this.secretariaEducacaoService = secretariaEducacaoService;
     }
 
+    @PerfisPermitidos({
+            PerfilGlobalEnum.ROLE_ADMIN,
+            PerfilGlobalEnum.ROLE_SECRETARIA
+    })
     @PostMapping
     @Operation(
             summary = "Criar secretaria de educação",
@@ -132,6 +138,10 @@ public class SecretariaEducacaoController {
                 );
     }
 
+    @PerfisPermitidos({
+            PerfilGlobalEnum.ROLE_ADMIN,
+            PerfilGlobalEnum.ROLE_SECRETARIA
+    })
     @PutMapping("/{id}")
     @Operation(
             summary = "Atualizar secretaria de educação",
@@ -183,6 +193,10 @@ public class SecretariaEducacaoController {
                 );
     }
 
+    @PerfisPermitidos({
+            PerfilGlobalEnum.ROLE_ADMIN,
+            PerfilGlobalEnum.ROLE_SECRETARIA
+    })
     @DeleteMapping("/{id}")
     @Operation(
             summary = "Excluir secretaria de educação",

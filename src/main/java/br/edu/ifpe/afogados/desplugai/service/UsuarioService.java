@@ -1,12 +1,17 @@
 package br.edu.ifpe.afogados.desplugai.service;
 
 import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
+import br.edu.ifpe.afogados.desplugai.dto.PerfilUsuarioDTO;
 import br.edu.ifpe.afogados.desplugai.dto.UsuarioDTO;
+import br.edu.ifpe.afogados.desplugai.entity.PerfilUsuario;
 import br.edu.ifpe.afogados.desplugai.entity.Usuario;
 import br.edu.ifpe.afogados.desplugai.enums.StatusHomologacaoEnum;
 import br.edu.ifpe.afogados.desplugai.mapper.UsuarioMapper;
+import br.edu.ifpe.afogados.desplugai.repository.PerfilUsuarioRepository;
 import br.edu.ifpe.afogados.desplugai.repository.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -17,18 +22,35 @@ import java.util.*;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PerfilUsuarioRepository perfilUsuarioRepository;
     private final UsuarioMapper usuarioMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PerfilUsuarioRepository perfilUsuarioRepository, UsuarioMapper usuarioMapper, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.perfilUsuarioRepository = perfilUsuarioRepository;
         this.usuarioMapper = usuarioMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional
     public UsuarioDTO salvarUsuario(UsuarioDTO usuarioDTO) {
+
         Usuario usuario = usuarioMapper.toEntity(usuarioDTO);
+        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         usuario.setDataRegistro(Timestamp.from(Instant.now()));
         usuario.setStatusHomologacao(StatusHomologacaoEnum.PENDENTE);
         Usuario usuarioSalvo = usuarioRepository.save(usuario);
+
+        List<PerfilUsuario> perfisUsuario = new ArrayList<>();
+        usuarioDTO.getPerfisUsuario().forEach(perfil -> {
+            PerfilUsuario perfilUsuario = new PerfilUsuario();
+            perfilUsuario.setUsuario(usuarioSalvo);
+            perfilUsuario.setPerfil(perfil.getPerfil());
+            perfisUsuario.add(perfilUsuario);
+        });
+
+        perfilUsuarioRepository.saveAll(perfisUsuario);
         return usuarioMapper.toDto(usuarioSalvo);
     }
 
@@ -53,6 +75,16 @@ public class UsuarioService {
     public UsuarioDTO atualizarUsuario(Long id, UsuarioDTO usuarioDTO) {
         Usuario usuarioCadastrado = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        if(usuarioDTO.getPerfisUsuario() != null) {
+            for(PerfilUsuarioDTO perfil : usuarioDTO.getPerfisUsuario()) {
+                if(perfilUsuarioRepository.existsByUsuario_IdAndPerfil(usuarioCadastrado.getId(), perfil.getPerfil())) {
+                    throw new RuntimeException("O perfil de %s já é vinculado ao usuário".formatted(perfil.getPerfil().getDescricao()));
+                }
+            }
+        }
+
+
 
         usuarioCadastrado.setNome(usuarioDTO.getNome());
         usuarioCadastrado = usuarioRepository.save(usuarioCadastrado);
