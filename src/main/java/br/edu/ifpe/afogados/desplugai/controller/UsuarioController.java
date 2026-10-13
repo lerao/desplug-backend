@@ -2,6 +2,8 @@ package br.edu.ifpe.afogados.desplugai.controller;
 
 import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
 import br.edu.ifpe.afogados.desplugai.dto.UsuarioDTO;
+import br.edu.ifpe.afogados.desplugai.enums.PerfilGlobalEnum;
+import br.edu.ifpe.afogados.desplugai.security.PerfisPermitidos;
 import br.edu.ifpe.afogados.desplugai.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -67,6 +69,10 @@ public class UsuarioController {
                 .body(usuarioService.salvarUsuario(dto));
     }
 
+    @PerfisPermitidos({
+            PerfilGlobalEnum.ROLE_ADMIN,
+            PerfilGlobalEnum.ROLE_SECRETARIA
+    })
     @GetMapping
     @Operation(
             summary = "Listar usuários",
