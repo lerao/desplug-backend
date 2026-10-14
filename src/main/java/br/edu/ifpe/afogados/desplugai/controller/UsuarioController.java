@@ -3,11 +3,13 @@ package br.edu.ifpe.afogados.desplugai.controller;
 import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
 import br.edu.ifpe.afogados.desplugai.dto.UsuarioDTO;
 import br.edu.ifpe.afogados.desplugai.enums.PerfilGlobalEnum;
+import br.edu.ifpe.afogados.desplugai.enums.StatusHomologacaoEnum;
 import br.edu.ifpe.afogados.desplugai.security.PerfisPermitidos;
 import br.edu.ifpe.afogados.desplugai.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -206,5 +208,47 @@ public class UsuarioController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(usuarioService.deletarUsuario(id));
+    }
+
+    @PerfisPermitidos({
+            PerfilGlobalEnum.ROLE_ADMIN,
+            PerfilGlobalEnum.ROLE_SECRETARIA
+    })
+    @GetMapping("/{id}/{status}")
+    @Operation(
+            summary = "Homologar usuário",
+            description = "Homologa um usuário existente do sistema, alterandos seu status de PENDENTE para HOMOLOGADO."
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Usuário homologado com sucesso.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ApiResponseDTO.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Usuário não encontrado.",
+                    content = @Content
+            )
+    })
+    public ResponseEntity<ApiResponseDTO> alterarStatusUsuario(
+            @Parameter(
+                    description = "Identificador do usuário.",
+                    example = "2",
+                    required = true
+            )
+            @PathVariable Long id,
+            @Parameter(
+                    description = "Status do usuário para ser alterado.",
+                    examples = {@ExampleObject(value = "APROVADO"), @ExampleObject(value = "REPROVADO")}
+            )
+            @PathVariable StatusHomologacaoEnum status
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(usuarioService.alterarStatusUsuario(id, status));
     }
 }
