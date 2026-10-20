@@ -11,6 +11,29 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
+    private static final String[] ROTAS_PUBLICAS = {
+            "/auth/**",
+
+            // Swagger UI
+            "/swagger",
+            "/swagger/",
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+
+            // Documentação OpenAPI
+            "/v3/api-docs",
+            "/v3/api-docs/**",
+            "/v3/api-docs.yaml",
+            "/api-docs",
+            "/api-docs/**",
+            "/api-docs.yaml",
+
+            // Recursos auxiliares do Swagger
+            "/swagger-resources/**",
+            "/configuration/**",
+            "/webjars/**"
+    };
+
     private final AuthInterceptor authInterceptor;
     private final AutorizacaoInterceptor autorizacaoInterceptor;
 
@@ -19,12 +42,12 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(authInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/auth/**")
+                .excludePathPatterns(ROTAS_PUBLICAS)
                 .order(1);
 
         registry.addInterceptor(autorizacaoInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/auth/**")
+                .excludePathPatterns(ROTAS_PUBLICAS)
                 .order(2);
     }
 }
