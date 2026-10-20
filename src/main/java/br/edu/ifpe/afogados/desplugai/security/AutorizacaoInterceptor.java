@@ -22,7 +22,12 @@ public class AutorizacaoInterceptor implements HandlerInterceptor {
     public boolean preHandle(
             HttpServletRequest request,
             HttpServletResponse response,
-            Object handler) throws IOException {
+            Object handler
+    ) throws IOException {
+
+        if (isRotaLiberada(request)) {
+            return true;
+        }
 
         if (!(handler instanceof HandlerMethod handlerMethod)) {
             return true;
@@ -73,5 +78,12 @@ public class AutorizacaoInterceptor implements HandlerInterceptor {
         }
 
         return true;
+    }
+
+    private boolean isRotaLiberada(HttpServletRequest request) {
+        String path = request.getRequestURI()
+                .substring(request.getContextPath().length());
+
+        return path.equals("/usuario") && "POST".equalsIgnoreCase(request.getMethod());
     }
 }
