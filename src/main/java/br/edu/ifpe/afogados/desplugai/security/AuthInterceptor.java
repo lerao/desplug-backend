@@ -29,6 +29,11 @@ public class AuthInterceptor implements HandlerInterceptor {
             Object handler
     ) throws IOException {
 
+
+        if (isRotaLiberada(request)) {
+            return true;
+        }
+
         String authorization = request.getHeader("Authorization");
 
         if (authorization == null
@@ -77,5 +82,12 @@ public class AuthInterceptor implements HandlerInterceptor {
         request.setAttribute(SESSAO_ATTRIBUTE, sessao);
 
         return true;
+    }
+
+    private boolean isRotaLiberada(HttpServletRequest request) {
+        String path = request.getRequestURI()
+                .substring(request.getContextPath().length());
+
+        return path.equals("/usuario") && "POST".equalsIgnoreCase(request.getMethod());
     }
 }
