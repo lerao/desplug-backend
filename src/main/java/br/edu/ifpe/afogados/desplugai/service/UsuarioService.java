@@ -14,7 +14,6 @@ import br.edu.ifpe.afogados.desplugai.mapper.UsuarioMapper;
 import br.edu.ifpe.afogados.desplugai.repository.PerfilUsuarioRepository;
 import br.edu.ifpe.afogados.desplugai.repository.ProfessorAfiliacaoRepository;
 import br.edu.ifpe.afogados.desplugai.repository.UsuarioRepository;
-import br.edu.ifpe.afogados.desplugai.utils.SessaoUtils;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
@@ -33,7 +32,7 @@ public class UsuarioService {
     private final ProfessorAfiliacaoRepository professorAfiliacaoRepository;
     private final UsuarioMapper usuarioMapper;
     private final PasswordEncoder passwordEncoder;
-    private final SessaoUtils sessaoUtils;
+    private final UsuarioAutenticadoService usuarioAutenticadoService;
 
     public UsuarioService(
             UsuarioRepository usuarioRepository,
@@ -41,14 +40,14 @@ public class UsuarioService {
             ProfessorAfiliacaoRepository professorAfiliacaoRepository,
             UsuarioMapper usuarioMapper,
             PasswordEncoder passwordEncoder,
-            SessaoUtils sessaoUtils
+            UsuarioAutenticadoService usuarioAutenticadoService
     ) {
         this.usuarioRepository = usuarioRepository;
         this.perfilUsuarioRepository = perfilUsuarioRepository;
         this.professorAfiliacaoRepository = professorAfiliacaoRepository;
         this.usuarioMapper = usuarioMapper;
         this.passwordEncoder = passwordEncoder;
-        this.sessaoUtils = sessaoUtils;
+        this.usuarioAutenticadoService = usuarioAutenticadoService;
     }
 
     @Transactional
@@ -125,11 +124,13 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        SessaoUsuario sessao = sessaoUtils.getSessaoAtual();
 
-        if(!PerfilGlobalEnum.ROLE_ADMIN.equals(sessao.getPerfilAtivo())) {
+        if(!usuarioAutenticadoService.isAdmin()) {
             // perfil de secretaria
-            Usuario secretaria = sessao.getUsuario();
+            Usuario secretaria = usuarioRepository
+                    .findById(usuarioAutenticadoService.getIdUsuario())
+                    .orElseThrow(() -> new RuntimeException("Secretaria não encontrada"));
+
             ProfessorAfiliacao professorAfiliacao = professorAfiliacaoRepository.findByProfessor_IdAndSecretaria_Id(
                     idUsuario,
                     secretaria.getId()

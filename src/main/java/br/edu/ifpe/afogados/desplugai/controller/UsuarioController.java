@@ -2,9 +2,7 @@ package br.edu.ifpe.afogados.desplugai.controller;
 
 import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
 import br.edu.ifpe.afogados.desplugai.dto.UsuarioDTO;
-import br.edu.ifpe.afogados.desplugai.enums.PerfilGlobalEnum;
 import br.edu.ifpe.afogados.desplugai.enums.StatusHomologacaoEnum;
-import br.edu.ifpe.afogados.desplugai.security.PerfisPermitidos;
 import br.edu.ifpe.afogados.desplugai.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -71,10 +70,7 @@ public class UsuarioController {
                 .body(usuarioService.salvarUsuario(dto));
     }
 
-    @PerfisPermitidos({
-            PerfilGlobalEnum.ROLE_ADMIN,
-            PerfilGlobalEnum.ROLE_SECRETARIA
-    })
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SECRETARIA')")
     @GetMapping
     @Operation(
             summary = "Listar usuários",
@@ -210,10 +206,7 @@ public class UsuarioController {
                 .body(usuarioService.deletarUsuario(id));
     }
 
-    @PerfisPermitidos({
-            PerfilGlobalEnum.ROLE_ADMIN,
-            PerfilGlobalEnum.ROLE_SECRETARIA
-    })
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SECRETARIA')")
     @GetMapping("/{id}/{status}")
     @Operation(
             summary = "Homologar usuário",

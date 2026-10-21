@@ -8,6 +8,4 @@ import java.util.Optional;
 
 @Repository
 public interface SessaoUsuarioRepository extends JpaRepository<SessaoUsuario, Long> {
-
-    Optional<SessaoUsuario> findByToken(String token);
 }

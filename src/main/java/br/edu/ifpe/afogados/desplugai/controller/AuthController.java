@@ -1,6 +1,5 @@
 package br.edu.ifpe.afogados.desplugai.controller;
 
-import br.edu.ifpe.afogados.desplugai.dto.ContextoAdaptacaoIADTO;
 import br.edu.ifpe.afogados.desplugai.dto.LoginRequestDTO;
 import br.edu.ifpe.afogados.desplugai.dto.SessaoUsuarioDTO;
 import br.edu.ifpe.afogados.desplugai.service.AuthService;
