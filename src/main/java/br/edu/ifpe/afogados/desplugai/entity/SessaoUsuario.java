@@ -20,9 +20,6 @@ public class SessaoUsuario {
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 
-    @Column(name = "token", nullable = false, unique = true, length = 64)
-    private String token;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "perfil_ativo", nullable = false, length = 40)
     private PerfilGlobalEnum perfilAtivo;

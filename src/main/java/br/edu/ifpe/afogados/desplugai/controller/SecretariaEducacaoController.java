@@ -2,8 +2,6 @@ package br.edu.ifpe.afogados.desplugai.controller;
 
 import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
 import br.edu.ifpe.afogados.desplugai.dto.SecretariaEducacaoDTO;
-import br.edu.ifpe.afogados.desplugai.enums.PerfilGlobalEnum;
-import br.edu.ifpe.afogados.desplugai.security.PerfisPermitidos;
 import br.edu.ifpe.afogados.desplugai.service.SecretariaEducacaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -15,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,10 +34,7 @@ public class SecretariaEducacaoController {
         this.secretariaEducacaoService = secretariaEducacaoService;
     }
 
-    @PerfisPermitidos({
-            PerfilGlobalEnum.ROLE_ADMIN,
-            PerfilGlobalEnum.ROLE_SECRETARIA
-    })
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @PostMapping
     @Operation(
             summary = "Criar secretaria de educação",
@@ -138,10 +134,7 @@ public class SecretariaEducacaoController {
                 );
     }
 
-    @PerfisPermitidos({
-            PerfilGlobalEnum.ROLE_ADMIN,
-            PerfilGlobalEnum.ROLE_SECRETARIA
-    })
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @PutMapping("/{id}")
     @Operation(
             summary = "Atualizar secretaria de educação",
@@ -193,10 +186,7 @@ public class SecretariaEducacaoController {
                 );
     }
 
-    @PerfisPermitidos({
-            PerfilGlobalEnum.ROLE_ADMIN,
-            PerfilGlobalEnum.ROLE_SECRETARIA
-    })
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(
             summary = "Excluir secretaria de educação",
