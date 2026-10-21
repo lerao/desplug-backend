@@ -2,8 +2,6 @@ package br.edu.ifpe.afogados.desplugai.controller;
 
 import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
 import br.edu.ifpe.afogados.desplugai.dto.HabilidadeBnccDTO;
-import br.edu.ifpe.afogados.desplugai.enums.PerfilGlobalEnum;
-import br.edu.ifpe.afogados.desplugai.security.PerfisPermitidos;
 import br.edu.ifpe.afogados.desplugai.service.HabilidadeBnccService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -15,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,10 +33,7 @@ public class HabilidadeBnccController {
         this.habilidadeBnccService = habilidadeBnccService;
     }
 
-    @PerfisPermitidos({
-            PerfilGlobalEnum.ROLE_ADMIN,
-            PerfilGlobalEnum.ROLE_SECRETARIA
-    })
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SECRETARIA')")
     @PostMapping
     @Operation(
             summary = "Criar habilidade BNCC",
@@ -128,10 +124,7 @@ public class HabilidadeBnccController {
                 .body(habilidadeBnccService.buscarHabilidadeBncc(id));
     }
 
-    @PerfisPermitidos({
-            PerfilGlobalEnum.ROLE_ADMIN,
-            PerfilGlobalEnum.ROLE_SECRETARIA
-    })
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SECRETARIA')")
     @PutMapping("/{id}")
     @Operation(
             summary = "Atualizar habilidade BNCC",
@@ -180,10 +173,7 @@ public class HabilidadeBnccController {
                 .body(habilidadeBnccService.atualizarHabilidadeBncc(id, dto));
     }
 
-    @PerfisPermitidos({
-            PerfilGlobalEnum.ROLE_ADMIN,
-            PerfilGlobalEnum.ROLE_SECRETARIA
-    })
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SECRETARIA')")
     @DeleteMapping("/{id}")
     @Operation(
             summary = "Excluir habilidade BNCC",
