@@ -125,6 +125,9 @@ public class SecurityConfig {
                         .requestMatchers(
                                 HttpMethod.POST, "/usuario"
                         ).permitAll()
+                        .requestMatchers(
+                                HttpMethod.GET, "/plano-aula/**"
+                        ).permitAll()
 
                         .requestMatchers(
                                 "/swagger",
