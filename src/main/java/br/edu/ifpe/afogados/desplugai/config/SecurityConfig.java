@@ -126,7 +126,9 @@ public class SecurityConfig {
                                 HttpMethod.POST, "/usuario"
                         ).permitAll()
                         .requestMatchers(
-                                HttpMethod.GET, "/plano-aula/**"
+                                HttpMethod.GET,
+                                "/plano-aula",
+                                "/plano-aula/**"
                         ).permitAll()
 
                         .requestMatchers(
