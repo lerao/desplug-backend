@@ -5,6 +5,7 @@ import br.edu.ifpe.afogados.desplugai.dto.MunicipioDTO;
 import br.edu.ifpe.afogados.desplugai.dto.PlanoAulaDTO;
 import br.edu.ifpe.afogados.desplugai.service.LocalidadeService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -79,7 +80,14 @@ public class LocalidadeController {
                     content = @Content
             )
     })
-    public ResponseEntity<List<MunicipioDTO>> listarMunicipiosEstado(@PathVariable String uf) {
+    public ResponseEntity<List<MunicipioDTO>> listarMunicipiosEstado(
+            @Parameter(
+                    description = "Sigla do estado",
+                    example = "BA, PE, RJ",
+                    required = true
+            )
+            @PathVariable String uf
+    ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(localidadeService.listarMunicipios(uf));
