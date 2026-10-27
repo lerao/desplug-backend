@@ -143,6 +143,10 @@ public class SecurityConfig {
 
                         .requestMatchers("/error").permitAll()
 
+                        .requestMatchers(HttpMethod.GET,
+                                "/localidade/**"
+                        ).permitAll()
+
                         .anyRequest().authenticated()
                 )
 
