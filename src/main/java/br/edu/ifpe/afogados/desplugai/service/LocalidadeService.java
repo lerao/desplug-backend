@@ -3,9 +3,11 @@ package br.edu.ifpe.afogados.desplugai.service;
 import br.edu.ifpe.afogados.desplugai.dto.EstadoDTO;
 import br.edu.ifpe.afogados.desplugai.dto.MunicipioDTO;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.net.http.HttpClient;
 import java.util.List;
 import java.util.Locale;
 
@@ -16,10 +18,16 @@ public class LocalidadeService {
     private final RestClient restClient;
 
     public LocalidadeService(RestClient.Builder builder) {
-        this.restClient = builder.baseUrl(URL_LOCALIDADE).build();
+        this.restClient = builder
+                        .baseUrl(URL_LOCALIDADE)
+                        .build();;
     }
 
     public List<EstadoDTO> listarEstados() {
+
+
+
+
         List<EstadoDTO> estados = restClient.get()
                 .uri("/estados?orderBy=nome")
                 .retrieve()
