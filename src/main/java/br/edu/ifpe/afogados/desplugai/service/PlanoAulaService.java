@@ -172,7 +172,10 @@ public class PlanoAulaService {
 
 
     public List<PlanoAulaDTO> listarPlanosAulaAutor(Long autorId) {
-        List<PlanoAula> planosAulaUsuario = planoAulaRepository.findByAutor(autorId);
+        Usuario autor = usuarioRepository.findById(autorId)
+                .orElseThrow(() -> new RuntimeException("Autor não encontrado"));
+
+        List<PlanoAula> planosAulaUsuario = planoAulaRepository.findByAutor(autor);
 
         return planosAulaUsuario
                 .stream()
