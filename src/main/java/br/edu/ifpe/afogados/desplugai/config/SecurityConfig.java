@@ -130,6 +130,11 @@ public class SecurityConfig {
                                 "/plano-aula",
                                 "/plano-aula/**"
                         ).permitAll()
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/feedback-pratico",
+                                "/feedback-pratico/**"
+                        ).permitAll()
 
                         .requestMatchers(
                                 "/swagger",
