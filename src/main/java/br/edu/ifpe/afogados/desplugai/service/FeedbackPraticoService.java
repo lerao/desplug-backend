@@ -85,13 +85,6 @@ public class FeedbackPraticoService {
                                 )
                         );
 
-        feedbackPraticoCadastrado.setPlano(
-                planoAulaMapper.toEntity( feedbackPraticoDTO.getPlano())
-        );
-
-        feedbackPraticoCadastrado.setUsuario(
-                usuarioMapper.toEntity(feedbackPraticoDTO.getUsuario())
-        );
 
         feedbackPraticoCadastrado.setRelatoExperiencia(
                 feedbackPraticoDTO.getRelatoExperiencia()
@@ -101,9 +94,6 @@ public class FeedbackPraticoService {
                 feedbackPraticoDTO.getAvaliacaoGeral()
         );
 
-        feedbackPraticoCadastrado.setFotosEvidencias(
-                feedbackPraticoDTO.getFotosEvidencias()
-        );
 
         feedbackPraticoCadastrado.setDataAplicacao(
                 feedbackPraticoDTO.getDataAplicacao()
