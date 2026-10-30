@@ -37,9 +37,6 @@ public class FeedbackPraticoDTO {
     @NotNull(message = "A avaliação geral é de preenchimento obrigatório.")
     private FeedbackPraticoEnum avaliacaoGeral;
 
-    @NotNull(message = "A quantidade de fotos/evidências é de preenchimento obrigatório.")
-    private Integer fotosEvidencias;
-
     @NotNull(message = "A data de aplicação é de preenchimento obrigatório.")
     private Timestamp dataAplicacao;
 

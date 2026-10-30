@@ -33,9 +33,6 @@ public class FeedbackPratico {
     private FeedbackPraticoEnum avaliacaoGeral;
 
     @Column(nullable = false)
-    private Integer fotosEvidencias;
-
-    @Column(nullable = false)
     private Timestamp dataAplicacao;
 
     @Column(nullable = false)
