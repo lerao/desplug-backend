@@ -1,6 +1,7 @@
 package br.edu.ifpe.afogados.desplugai.controller;
 
 import br.edu.ifpe.afogados.desplugai.dto.EstadoDTO;
+import br.edu.ifpe.afogados.desplugai.dto.LocalidadeSecretariaDTO;
 import br.edu.ifpe.afogados.desplugai.dto.MunicipioDTO;
 import br.edu.ifpe.afogados.desplugai.dto.PlanoAulaDTO;
 import br.edu.ifpe.afogados.desplugai.service.LocalidadeService;
@@ -34,62 +35,36 @@ public class LocalidadeController {
         this.localidadeService = localidadeService;
     }
 
-    @GetMapping("/estados")
+    @GetMapping("/{cep}")
     @Operation(
-            summary = "Listar estados",
-            description = "Retorna a lista de todos os estados."
+            summary = "Buscar a localidade",
+            description = "Retorna a localidade a partir do CEP"
     )
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
-                    description = "Estados listados com sucesso.",
+                    description = "Localidade encontrada com sucesso",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = EstadoDTO.class)
+                            schema = @Schema(implementation = LocalidadeSecretariaDTO.class)
                     )
             ),
             @ApiResponse(
-                    responseCode = "400",
-                    description = "Falha ao listar os estados.",
+                    responseCode = "404",
+                    description = "Localidade não encontrada",
                     content = @Content
             )
     })
-    public ResponseEntity<List<EstadoDTO>> listarEstados() {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(localidadeService.listarEstados());
-    }
-
-    @GetMapping("/{uf}/municipios")
-    @Operation(
-            summary = "Listar municípios de um estado",
-            description = "Retorna a lista de todos os municípios de um estado."
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Municípios listados com sucesso.",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = MunicipioDTO.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Falha ao listar os municípios.",
-                    content = @Content
-            )
-    })
-    public ResponseEntity<List<MunicipioDTO>> listarMunicipiosEstado(
+    public ResponseEntity<LocalidadeSecretariaDTO> buscarLocalidade(
             @Parameter(
-                    description = "Sigla do estado",
-                    example = "BA, PE, RJ",
+                    description = "CEP da localidade",
+                    example = "56812666",
                     required = true
             )
-            @PathVariable String uf
+            @PathVariable String cep
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(localidadeService.listarMunicipios(uf));
+                .body(localidadeService.buscarLocalidade(cep));
     }
 }
