@@ -2,6 +2,8 @@ package br.edu.ifpe.afogados.desplugai.controller;
 
 import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
 import br.edu.ifpe.afogados.desplugai.dto.PlanoAulaDTO;
+import br.edu.ifpe.afogados.desplugai.dto.PlanoAulaFiltroDTO;
+import br.edu.ifpe.afogados.desplugai.entity.PlanoAula;
 import br.edu.ifpe.afogados.desplugai.service.PlanoAulaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,6 +13,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -233,5 +240,50 @@ public class PlanoAulaController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(planoAulaService.listarPlanosAulaAutor(autorId));
+    }
+
+    @GetMapping("/pesquisar")
+    @Operation(
+            summary = "Listar planos planos de aula a partir de filtros",
+            description = "Retorna todos os planos de aula que atendam aos filtros correspondentes"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = """
+                    Retorna uma lista paginada de planos de aula,
+                    permitindo combinar diferentes filtros na mesma requisição.
+        
+                    Todos os filtros são opcionais.
+        
+                    A paginação utiliza índices iniciados em zero.
+                    Caso não sejam informados, serão utilizados os seguintes padrões:
+                    - page: 0
+                    - size: 10
+                    - sort: dataCriacao,desc
+        
+                    Os filtros informados são combinados utilizando AND.
+                    """,
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Page.class)
+                    )
+            )
+    })
+    public ResponseEntity<Page<PlanoAulaDTO>> buscar(
+            @ParameterObject
+            @ModelAttribute
+            PlanoAulaFiltroDTO filtros,
+
+            @ParameterObject
+            @PageableDefault(
+                    size = 10,
+                    sort = "dataCriacao",
+                    direction = Sort.Direction.DESC
+            ) Pageable pageable) {
+
+        return ResponseEntity.ok(
+                planoAulaService.listarPlanosAulaFiltrados(filtros, pageable)
+        );
     }
 }
