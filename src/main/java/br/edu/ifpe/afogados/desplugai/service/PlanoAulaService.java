@@ -196,6 +196,15 @@ public class PlanoAulaService {
         Specification<PlanoAula> specification =
                 (root, query, cb) -> cb.conjunction();
 
+        if(filtros.getIdAutor() != null) {
+            Usuario autor = usuarioRepository.findById(filtros.getIdAutor())
+                    .orElseThrow(() -> new RuntimeException("Autor não encontrado"));
+
+            specification = specification.and(
+                    PlanoAulaSpecification.comAutor(autor)
+            );
+        }
+
         if (filtros.getTitulo() != null &&
                 !filtros.getTitulo().isBlank()) {
 

@@ -9,6 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PlanoAulaFiltroDTO {
+
+    private Long idAutor;
     private String titulo;
     private String resumo;
     private TipoAtividadeEnum tipoAtividade;

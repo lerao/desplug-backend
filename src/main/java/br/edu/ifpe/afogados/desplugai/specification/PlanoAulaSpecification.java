@@ -3,6 +3,7 @@ package br.edu.ifpe.afogados.desplugai.specification;
 import br.edu.ifpe.afogados.desplugai.entity.HabilidadeBncc;
 import br.edu.ifpe.afogados.desplugai.entity.HabilidadePlano;
 import br.edu.ifpe.afogados.desplugai.entity.PlanoAula;
+import br.edu.ifpe.afogados.desplugai.entity.Usuario;
 import br.edu.ifpe.afogados.desplugai.enums.EtapaEnsinoEnum;
 import br.edu.ifpe.afogados.desplugai.enums.StatusPublicacaoEnum;
 import br.edu.ifpe.afogados.desplugai.enums.TipoAtividadeEnum;
@@ -11,6 +12,14 @@ import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 
 public class PlanoAulaSpecification {
+
+    public static Specification<PlanoAula> comAutor(Usuario autor) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(
+                        root.get("autor"),
+                        autor
+                );
+    }
 
     public static Specification<PlanoAula> comTitulo(String titulo) {
         return (root, query, criteriaBuilder) ->
