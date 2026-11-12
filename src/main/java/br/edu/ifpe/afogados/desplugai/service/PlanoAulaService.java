@@ -261,12 +261,12 @@ public class PlanoAulaService {
             );
         }
 
-        if (filtros.getComponenteCurricular() != null &&
-                !filtros.getComponenteCurricular().isBlank()) {
+        if (filtros.getComponentesCurriculares() != null &&
+                !filtros.getComponentesCurriculares().isBlank()) {
 
             specification = specification.and(
-                    PlanoAulaSpecification.comComponenteCurricular(
-                            filtros.getComponenteCurricular()
+                    PlanoAulaSpecification.comComponentesCurriculares(
+                            filtros.getComponentesCurriculares()
                     )
             );
         }
