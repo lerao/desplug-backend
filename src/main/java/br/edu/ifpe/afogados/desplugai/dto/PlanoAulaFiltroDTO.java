@@ -17,7 +17,7 @@ public class PlanoAulaFiltroDTO {
     private EtapaEnsinoEnum etapaEnsino;
     private String anosIndicados;
     private String comDuracao;
-    private String componenteCurricular;
+    private String componentesCurriculares;
     private String materiaisNecessarios;
     private String metodologia;
     private String codigoHabilidade;

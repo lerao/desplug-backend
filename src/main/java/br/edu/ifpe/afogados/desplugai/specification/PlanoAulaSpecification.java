@@ -73,14 +73,14 @@ public class PlanoAulaSpecification {
                 );
     }
 
-    public static Specification<PlanoAula> comComponenteCurricular(String componente) {
+    public static Specification<PlanoAula> comComponentesCurriculares(String componentes) {
 
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.like(
                         criteriaBuilder.lower(
-                                root.get("componenteCurricular")
+                                root.get("componentesCurriculares")
                         ),
-                        "%" + componente.toLowerCase() + "%"
+                        "%" + componentes.toLowerCase() + "%"
                 );
     }
 
