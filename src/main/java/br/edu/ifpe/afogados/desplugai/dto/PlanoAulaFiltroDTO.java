@@ -1,6 +1,7 @@
 package br.edu.ifpe.afogados.desplugai.dto;
 
 import br.edu.ifpe.afogados.desplugai.enums.EtapaEnsinoEnum;
+import br.edu.ifpe.afogados.desplugai.enums.PlanoAulaOrdenacaoEnum;
 import br.edu.ifpe.afogados.desplugai.enums.StatusPublicacaoEnum;
 import br.edu.ifpe.afogados.desplugai.enums.TipoAtividadeEnum;
 import lombok.Getter;
@@ -23,4 +24,5 @@ public class PlanoAulaFiltroDTO {
     private String codigoHabilidade;
     private StatusPublicacaoEnum statusPublicacao;
     private Boolean isGeradoIA;
+    private PlanoAulaOrdenacaoEnum orderBy;
 }

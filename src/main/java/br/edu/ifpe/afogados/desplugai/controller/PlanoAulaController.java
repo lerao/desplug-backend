@@ -276,11 +276,8 @@ public class PlanoAulaController {
             PlanoAulaFiltroDTO filtros,
 
             @ParameterObject
-            @PageableDefault(
-                    size = 10,
-                    sort = "dataCriacao",
-                    direction = Sort.Direction.DESC
-            ) Pageable pageable) {
+            @PageableDefault(size = 10) Pageable pageable
+    ) {
 
         return ResponseEntity.ok(
                 planoAulaService.listarPlanosAulaFiltrados(filtros, pageable)
