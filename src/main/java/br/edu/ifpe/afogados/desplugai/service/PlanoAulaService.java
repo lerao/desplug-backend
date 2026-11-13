@@ -8,6 +8,7 @@ import br.edu.ifpe.afogados.desplugai.entity.HabilidadeBncc;
 import br.edu.ifpe.afogados.desplugai.entity.HabilidadePlano;
 import br.edu.ifpe.afogados.desplugai.entity.PlanoAula;
 import br.edu.ifpe.afogados.desplugai.entity.Usuario;
+import br.edu.ifpe.afogados.desplugai.enums.PlanoAulaOrdenacaoEnum;
 import br.edu.ifpe.afogados.desplugai.enums.StatusPublicacaoEnum;
 import br.edu.ifpe.afogados.desplugai.mapper.PlanoAulaMapper;
 import br.edu.ifpe.afogados.desplugai.repository.HabilidadeBnccRepository;
@@ -17,7 +18,9 @@ import br.edu.ifpe.afogados.desplugai.repository.UsuarioRepository;
 import br.edu.ifpe.afogados.desplugai.specification.PlanoAulaSpecification;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -315,6 +318,29 @@ public class PlanoAulaService {
                             filtros.getIsGeradoIA()
                     )
             );
+        }
+
+        if(filtros.getOrderBy() != null) {
+            if(PlanoAulaOrdenacaoEnum.MAIS_RECENTES == filtros.getOrderBy()) {
+                Sort sort = Sort.by(
+                        Sort.Order.desc("dataCriacao"),
+                        Sort.Order.desc("id")
+                );
+
+                pageable = PageRequest.of(
+                        pageable.getPageNumber(),
+                        pageable.getPageSize(),
+                        sort
+                );
+            } else if(PlanoAulaOrdenacaoEnum.MAIS_FAVORITOS == filtros.getOrderBy()) {
+                specification = specification.and(
+                        PlanoAulaSpecification.comOrdenacaoMaisFavoritos()
+                );
+            } else if(PlanoAulaOrdenacaoEnum.MAIS_ADAPTADOS == filtros.getOrderBy()) {
+                specification = specification.and(
+                        PlanoAulaSpecification.comOrdenacaoMaisAdaptados()
+                );
+            }
         }
 
         Page<PlanoAula> resultado =
