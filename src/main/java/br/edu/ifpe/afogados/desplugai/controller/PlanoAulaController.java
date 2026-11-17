@@ -1,5 +1,7 @@
 package br.edu.ifpe.afogados.desplugai.controller;
 
+import br.edu.ifpe.afogados.desplugai.dto.*;
+import br.edu.ifpe.afogados.desplugai.service.ContextoAdaptacaoIAService;
 import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
 import br.edu.ifpe.afogados.desplugai.dto.PlanoAulaDTO;
 import br.edu.ifpe.afogados.desplugai.dto.PlanoAulaFiltroDTO;
@@ -33,9 +35,11 @@ import java.util.List;
 public class PlanoAulaController {
 
     private final PlanoAulaService planoAulaService;
+    private final ContextoAdaptacaoIAService contextoAdaptacaoIAService;
 
-    public PlanoAulaController(PlanoAulaService planoAulaService) {
+    public PlanoAulaController(PlanoAulaService planoAulaService, ContextoAdaptacaoIAService contextoAdaptacaoIAService) {
         this.planoAulaService = planoAulaService;
+        this.contextoAdaptacaoIAService = contextoAdaptacaoIAService;
     }
 
     @PostMapping
@@ -288,5 +292,15 @@ public class PlanoAulaController {
         return ResponseEntity.ok(
                 planoAulaService.listarPlanosAulaFiltrados(filtros, pageable)
         );
+    }
+
+    @PostMapping("/{idPlanoBase}/adaptar")
+    public ResponseEntity<PlanoAulaDTO> gerarAdaptacaoIA(
+            @PathVariable Long idPlanoBase,
+            @RequestBody @Valid AdaptacaoPlanoInput adaptacaoPlanoInput
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(contextoAdaptacaoIAService.gerarAdaptacaoIA(idPlanoBase, adaptacaoPlanoInput));
     }
 }
