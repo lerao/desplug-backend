@@ -9,6 +9,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+@Table(
+    name = "habilidade_bncc",
+    uniqueConstraints = {
+            @UniqueConstraint(
+                    name = "uk_habilidade_bncc_codigo",
+                    columnNames = "codigo"
+            )
+    }
+)
 public class HabilidadeBncc {
 
     @Id
@@ -18,11 +27,11 @@ public class HabilidadeBncc {
     @Column(nullable = false, unique = true)
     private String codigo;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "MEDIUMTEXT")
     private String descricao;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private EixoComputacaoEnum eixoComputacao;
 
     @Enumerated(EnumType.STRING)
@@ -34,4 +43,7 @@ public class HabilidadeBncc {
 
     @Column(nullable = false)
     private String componenteCurricular;
+
+    @Column(nullable = true)
+    private String objetoConhecimento;
 }
