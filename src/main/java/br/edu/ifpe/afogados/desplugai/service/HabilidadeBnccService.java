@@ -5,6 +5,8 @@ import br.edu.ifpe.afogados.desplugai.dto.HabilidadeBnccDTO;
 import br.edu.ifpe.afogados.desplugai.entity.HabilidadeBncc;
 import br.edu.ifpe.afogados.desplugai.mapper.HabilidadeBnccMapper;
 import br.edu.ifpe.afogados.desplugai.repository.HabilidadeBnccRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -33,13 +35,10 @@ public class HabilidadeBnccService {
         return habilidadeBnccMapper.toDto(habilidadeSalva);
     }
 
-    public List<HabilidadeBnccDTO> listarHabilidadesBncc() {
-        List<HabilidadeBncc> lista = habilidadeBnccRepository.findAll();
+    public Page<HabilidadeBnccDTO> listarHabilidadesBncc(Pageable pageable) {
+        Page<HabilidadeBncc> page = habilidadeBnccRepository.findAll(pageable);
 
-        return lista
-                .stream()
-                .map(habilidadeBnccMapper::toDto)
-                .toList();
+        return page.map(habilidadeBnccMapper::toDto);
     }
 
     public HabilidadeBnccDTO buscarHabilidadeBncc(Long id) {

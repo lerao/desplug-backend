@@ -16,6 +16,8 @@ import br.edu.ifpe.afogados.desplugai.repository.ProfessorAfiliacaoRepository;
 import br.edu.ifpe.afogados.desplugai.repository.UsuarioRepository;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -71,13 +73,10 @@ public class UsuarioService {
         return usuarioMapper.toDto(usuarioSalvo);
     }
 
-    public List<UsuarioDTO> listarUsuarios() {
-        List<Usuario> listaDeUsuarios = usuarioRepository.findAll();
+    public Page<UsuarioDTO> listarUsuarios(Pageable pageable) {
+        Page<Usuario> listaDeUsuarios = usuarioRepository.findAll(pageable);
 
-        return listaDeUsuarios
-                .stream()
-                .map(usuarioMapper::toDto)
-                .toList();
+        return listaDeUsuarios.map(usuarioMapper::toDto);
     }
 
     public UsuarioDTO buscarUsuario(Long id) {

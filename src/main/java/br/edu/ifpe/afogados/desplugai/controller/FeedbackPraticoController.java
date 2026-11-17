@@ -11,6 +11,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -84,18 +88,21 @@ public class FeedbackPraticoController {
             content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(
-                            implementation = FeedbackPraticoDTO.class
+                            implementation = Page.class
                     )
             )
     )
-    public ResponseEntity<List<FeedbackPraticoDTO>>
-    listarFeedbacksPraticos() {
+    public ResponseEntity<Page<FeedbackPraticoDTO>>
+    listarFeedbacksPraticos(
+            @ParameterObject
+            @PageableDefault(size = 10) Pageable pageable
+    ) {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(
                         feedbackPraticoService
-                                .listarFeedbacksPraticos()
+                                .listarFeedbacksPraticos(pageable)
                 );
     }
 

@@ -81,18 +81,21 @@ public class PlanoAulaController {
     )
     @ApiResponse(
             responseCode = "200",
-            description = "Planos de aula retornados com sucesso.",
+            description = """
+                    Retorna uma lista paginada de planos de aula
+                    """,
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(
-                            implementation = PlanoAulaDTO.class
-                    )
+                    schema = @Schema(implementation = Page.class)
             )
     )
-    public ResponseEntity<List<PlanoAulaDTO>> listarPlanosAula() {
+    public ResponseEntity<Page<PlanoAulaDTO>> listarPlanosAula(
+            @ParameterObject
+            @PageableDefault(size = 10) Pageable pageable
+    ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(planoAulaService.listarPlanosAula());
+                .body(planoAulaService.listarPlanosAula(pageable));
     }
 
     @GetMapping("/{id}")
@@ -220,7 +223,7 @@ public class PlanoAulaController {
                     description = "Planos de aula retornados com sucesso.",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = PlanoAulaDTO.class)
+                            schema = @Schema(implementation = Page.class)
                     )
             ),
             @ApiResponse(
@@ -229,17 +232,20 @@ public class PlanoAulaController {
                     content = @Content
             )
     })
-    public ResponseEntity<List<PlanoAulaDTO>> listarPlanosAulaAutor(
+    public ResponseEntity<Page<PlanoAulaDTO>> listarPlanosAulaAutor(
             @Parameter(
                     description = "Identificador do usuário (autor).",
                     example = "1",
                     required = true
             )
-            @PathVariable("id") Long autorId
+            @PathVariable("id") Long autorId,
+
+            @ParameterObject
+            @PageableDefault(size = 10) Pageable pageable
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(planoAulaService.listarPlanosAulaAutor(autorId));
+                .body(planoAulaService.listarPlanosAulaAutor(autorId, pageable));
     }
 
     @GetMapping("/pesquisar")
@@ -270,7 +276,7 @@ public class PlanoAulaController {
                     )
             )
     })
-    public ResponseEntity<Page<PlanoAulaDTO>> buscar(
+    public ResponseEntity<Page<PlanoAulaDTO>> buscaFiltrada(
             @ParameterObject
             @ModelAttribute
             PlanoAulaFiltroDTO filtros,
