@@ -5,6 +5,8 @@ import br.edu.ifpe.afogados.desplugai.dto.SecretariaEducacaoDTO;
 import br.edu.ifpe.afogados.desplugai.entity.SecretariaEducacao;
 import br.edu.ifpe.afogados.desplugai.mapper.SecretariaEducacaoMapper;
 import br.edu.ifpe.afogados.desplugai.repository.SecretariaEducacaoRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -35,11 +37,9 @@ public class SecretariaEducacaoService {
         return secretariaEducacaoMapper.toDto(secretariaEducacao);
     }
 
-    public List<SecretariaEducacaoDTO> listarSecretariasEducacao() {
-        return secretariaEducacaoRepository.findAll()
-                .stream()
-                .map(secretariaEducacaoMapper::toDto)
-                .toList();
+    public Page<SecretariaEducacaoDTO> listarSecretariasEducacao(Pageable pageable) {
+        return secretariaEducacaoRepository.findAll(pageable)
+                .map(secretariaEducacaoMapper::toDto);
     }
 
     public SecretariaEducacaoDTO buscarSecretariaEducacao(Long id) {

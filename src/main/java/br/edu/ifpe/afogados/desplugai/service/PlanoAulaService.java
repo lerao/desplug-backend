@@ -3,17 +3,25 @@ package br.edu.ifpe.afogados.desplugai.service;
 import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
 import br.edu.ifpe.afogados.desplugai.dto.HabilidadePlanoDTO;
 import br.edu.ifpe.afogados.desplugai.dto.PlanoAulaDTO;
+import br.edu.ifpe.afogados.desplugai.dto.PlanoAulaFiltroDTO;
 import br.edu.ifpe.afogados.desplugai.entity.HabilidadeBncc;
 import br.edu.ifpe.afogados.desplugai.entity.HabilidadePlano;
 import br.edu.ifpe.afogados.desplugai.entity.PlanoAula;
 import br.edu.ifpe.afogados.desplugai.entity.Usuario;
+import br.edu.ifpe.afogados.desplugai.enums.PlanoAulaOrdenacaoEnum;
 import br.edu.ifpe.afogados.desplugai.enums.StatusPublicacaoEnum;
 import br.edu.ifpe.afogados.desplugai.mapper.PlanoAulaMapper;
 import br.edu.ifpe.afogados.desplugai.repository.HabilidadeBnccRepository;
 import br.edu.ifpe.afogados.desplugai.repository.HabilidadePlanoRepository;
 import br.edu.ifpe.afogados.desplugai.repository.PlanoAulaRepository;
 import br.edu.ifpe.afogados.desplugai.repository.UsuarioRepository;
+import br.edu.ifpe.afogados.desplugai.specification.PlanoAulaSpecification;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -91,12 +99,9 @@ public class PlanoAulaService {
         return planoAulaMapper.toDto(planoAulaSalvo);
     }
 
-    public List<PlanoAulaDTO> listarPlanosAula() {
-        List<PlanoAula> listaPlanosAula = planoAulaRepository.findAll();
-        return listaPlanosAula
-                .stream()
-                .map(planoAulaMapper::toDto)
-                .toList();
+    public Page<PlanoAulaDTO> listarPlanosAula(Pageable pageable) {
+        Page<PlanoAula> listaPlanosAula = planoAulaRepository.findAll(pageable);
+        return listaPlanosAula.map(planoAulaMapper::toDto);
     }
 
     public PlanoAulaDTO buscarPlanoAula(Long id) {
@@ -171,13 +176,170 @@ public class PlanoAulaService {
     }
 
 
-    public List<PlanoAulaDTO> listarPlanosAulaAutor(Long autorId) {
-        List<PlanoAula> planosAulaUsuario = planoAulaRepository.findByAutor(autorId);
+    public Page<PlanoAulaDTO> listarPlanosAulaAutor(Long autorId, Pageable pageable) {
+        Usuario autor = usuarioRepository.findById(autorId)
+                .orElseThrow(() -> new RuntimeException("Autor não encontrado"));
 
-        return planosAulaUsuario
-                .stream()
-                .map(planoAulaMapper::toDto)
-                .toList();
+        Page<PlanoAula> planosAulaUsuario = planoAulaRepository.findByAutor(autor, pageable);
 
+        return planosAulaUsuario.map(planoAulaMapper::toDto);
+
+    }
+
+    public Page<PlanoAulaDTO> listarPlanosAulaFiltrados(
+            PlanoAulaFiltroDTO filtros,
+            Pageable pageable) {
+
+        Specification<PlanoAula> specification =
+                (root, query, cb) -> cb.conjunction();
+
+        if(filtros.getIdAutor() != null) {
+            Usuario autor = usuarioRepository.findById(filtros.getIdAutor())
+                    .orElseThrow(() -> new RuntimeException("Autor não encontrado"));
+
+            specification = specification.and(
+                    PlanoAulaSpecification.comAutor(autor)
+            );
+        }
+
+        if (filtros.getTitulo() != null &&
+                !filtros.getTitulo().isBlank()) {
+
+            specification = specification.and(
+                    PlanoAulaSpecification.comTitulo(
+                            filtros.getTitulo()
+                    )
+            );
+        }
+
+        if (filtros.getResumo() != null &&
+                !filtros.getResumo().isBlank()) {
+
+            specification = specification.and(
+                    PlanoAulaSpecification.comResumo(
+                            filtros.getResumo()
+                    )
+            );
+        }
+
+        if (filtros.getTipoAtividade() != null) {
+            specification = specification.and(
+                    PlanoAulaSpecification.comTipoAtividade(
+                            filtros.getTipoAtividade()
+                    )
+            );
+        }
+
+        if (filtros.getEtapaEnsino() != null) {
+            specification = specification.and(
+                    PlanoAulaSpecification.comEtapaEnsino(
+                            filtros.getEtapaEnsino()
+                    )
+            );
+        }
+
+        if (filtros.getAnosIndicados() != null &&
+                !filtros.getAnosIndicados().isBlank()) {
+
+            specification = specification.and(
+                    PlanoAulaSpecification.comAnosIndicados(
+                            filtros.getAnosIndicados()
+                    )
+            );
+        }
+
+        if (filtros.getComDuracao() != null &&
+                !filtros.getComDuracao().isBlank()) {
+
+            specification = specification.and(
+                    PlanoAulaSpecification.comDuracao(
+                            filtros.getComDuracao()
+                    )
+            );
+        }
+
+        if (filtros.getComponentesCurriculares() != null &&
+                !filtros.getComponentesCurriculares().isBlank()) {
+
+            specification = specification.and(
+                    PlanoAulaSpecification.comComponentesCurriculares(
+                            filtros.getComponentesCurriculares()
+                    )
+            );
+        }
+
+        if (filtros.getMateriaisNecessarios() != null &&
+                !filtros.getMateriaisNecessarios().isBlank()) {
+
+            specification = specification.and(
+                    PlanoAulaSpecification.comMateriaisNecessarios(
+                            filtros.getMateriaisNecessarios()
+                    )
+            );
+        }
+
+        if (filtros.getMetodologia() != null &&
+                !filtros.getMetodologia().isBlank()) {
+
+            specification = specification.and(
+                    PlanoAulaSpecification.comMetodologia(
+                            filtros.getMetodologia()
+                    )
+            );
+        }
+
+        if (filtros.getCodigoHabilidade() != null &&
+                !filtros.getCodigoHabilidade().isBlank()) {
+
+            specification = specification.and(
+                    PlanoAulaSpecification.comHabilidade(
+                            filtros.getCodigoHabilidade()
+                    )
+            );
+        }
+
+        if (filtros.getStatusPublicacao() != null) {
+            specification = specification.and(
+                    PlanoAulaSpecification.comStatusPublicacao(
+                            filtros.getStatusPublicacao()
+                    )
+            );
+        }
+
+        if (filtros.getIsGeradoIA() != null) {
+            specification = specification.and(
+                    PlanoAulaSpecification.comIsGeradoIA(
+                            filtros.getIsGeradoIA()
+                    )
+            );
+        }
+
+        if(filtros.getOrderBy() != null) {
+            if(PlanoAulaOrdenacaoEnum.MAIS_RECENTES == filtros.getOrderBy()) {
+                Sort sort = Sort.by(
+                        Sort.Order.desc("dataCriacao"),
+                        Sort.Order.desc("id")
+                );
+
+                pageable = PageRequest.of(
+                        pageable.getPageNumber(),
+                        pageable.getPageSize(),
+                        sort
+                );
+            } else if(PlanoAulaOrdenacaoEnum.MAIS_FAVORITOS == filtros.getOrderBy()) {
+                specification = specification.and(
+                        PlanoAulaSpecification.comOrdenacaoMaisFavoritos()
+                );
+            } else if(PlanoAulaOrdenacaoEnum.MAIS_ADAPTADOS == filtros.getOrderBy()) {
+                specification = specification.and(
+                        PlanoAulaSpecification.comOrdenacaoMaisAdaptados()
+                );
+            }
+        }
+
+        Page<PlanoAula> resultado =
+                planoAulaRepository.findAll(specification, pageable);
+
+        return resultado.map(planoAulaMapper::toDto);
     }
 }

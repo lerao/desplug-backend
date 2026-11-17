@@ -7,12 +7,13 @@ import br.edu.ifpe.afogados.desplugai.mapper.FeedbackPraticoMapper;
 import br.edu.ifpe.afogados.desplugai.mapper.PlanoAulaMapper;
 import br.edu.ifpe.afogados.desplugai.mapper.UsuarioMapper;
 import br.edu.ifpe.afogados.desplugai.repository.FeedbackPraticoRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.List;
 
 @Service
 public class FeedbackPraticoService {
@@ -51,12 +52,10 @@ public class FeedbackPraticoService {
         return feedbackPraticoMapper.toDto(feedbackPratico);
     }
 
-    public List<FeedbackPraticoDTO> listarFeedbacksPraticos() {
+    public Page<FeedbackPraticoDTO> listarFeedbacksPraticos(Pageable pageable) {
 
-        return feedbackPraticoRepository.findAll()
-                .stream()
-                .map(feedbackPraticoMapper::toDto)
-                .toList();
+        return feedbackPraticoRepository.findAll(pageable)
+                .map(feedbackPraticoMapper::toDto);
     }
 
     public FeedbackPraticoDTO buscarFeedbackPratico(Long id) {
@@ -85,13 +84,6 @@ public class FeedbackPraticoService {
                                 )
                         );
 
-        feedbackPraticoCadastrado.setPlano(
-                planoAulaMapper.toEntity( feedbackPraticoDTO.getPlano())
-        );
-
-        feedbackPraticoCadastrado.setUsuario(
-                usuarioMapper.toEntity(feedbackPraticoDTO.getUsuario())
-        );
 
         feedbackPraticoCadastrado.setRelatoExperiencia(
                 feedbackPraticoDTO.getRelatoExperiencia()
@@ -101,9 +93,6 @@ public class FeedbackPraticoService {
                 feedbackPraticoDTO.getAvaliacaoGeral()
         );
 
-        feedbackPraticoCadastrado.setFotosEvidencias(
-                feedbackPraticoDTO.getFotosEvidencias()
-        );
 
         feedbackPraticoCadastrado.setDataAplicacao(
                 feedbackPraticoDTO.getDataAplicacao()
