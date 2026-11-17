@@ -99,12 +99,9 @@ public class PlanoAulaService {
         return planoAulaMapper.toDto(planoAulaSalvo);
     }
 
-    public List<PlanoAulaDTO> listarPlanosAula() {
-        List<PlanoAula> listaPlanosAula = planoAulaRepository.findAll();
-        return listaPlanosAula
-                .stream()
-                .map(planoAulaMapper::toDto)
-                .toList();
+    public Page<PlanoAulaDTO> listarPlanosAula(Pageable pageable) {
+        Page<PlanoAula> listaPlanosAula = planoAulaRepository.findAll(pageable);
+        return listaPlanosAula.map(planoAulaMapper::toDto);
     }
 
     public PlanoAulaDTO buscarPlanoAula(Long id) {
@@ -179,16 +176,13 @@ public class PlanoAulaService {
     }
 
 
-    public List<PlanoAulaDTO> listarPlanosAulaAutor(Long autorId) {
+    public Page<PlanoAulaDTO> listarPlanosAulaAutor(Long autorId, Pageable pageable) {
         Usuario autor = usuarioRepository.findById(autorId)
                 .orElseThrow(() -> new RuntimeException("Autor não encontrado"));
 
-        List<PlanoAula> planosAulaUsuario = planoAulaRepository.findByAutor(autor);
+        Page<PlanoAula> planosAulaUsuario = planoAulaRepository.findByAutor(autor, pageable);
 
-        return planosAulaUsuario
-                .stream()
-                .map(planoAulaMapper::toDto)
-                .toList();
+        return planosAulaUsuario.map(planoAulaMapper::toDto);
 
     }
 
