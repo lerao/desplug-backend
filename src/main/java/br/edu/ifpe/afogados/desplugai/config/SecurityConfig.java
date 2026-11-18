@@ -153,6 +153,8 @@ public class SecurityConfig {
                                 "/localidade/**"
                         ).permitAll()
 
+                        .requestMatchers("/info").permitAll()
+
                         .anyRequest().authenticated()
                 )
 
