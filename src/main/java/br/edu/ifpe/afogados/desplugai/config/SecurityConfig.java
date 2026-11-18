@@ -153,7 +153,9 @@ public class SecurityConfig {
                                 "/localidade/**"
                         ).permitAll()
 
-                        .requestMatchers("/info").permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/info"
+                        ).permitAll()
 
                         .anyRequest().authenticated()
                 )
