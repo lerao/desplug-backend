@@ -295,8 +295,46 @@ public class PlanoAulaController {
     }
 
     @PostMapping("/{idPlanoBase}/adaptar")
+    @Operation(
+            summary = "Adaptar um plano de aula",
+            description = "Gera um plano adaptado com IA com base em um já existente."
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Plano de aula adaptado com sucesso.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = PlanoAulaDTO.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Dados inválidos ou falha na validação.",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Plano de aula base não encontrado.",
+                    content = @Content
+            )
+    })
     public ResponseEntity<PlanoAulaDTO> gerarAdaptacaoIA(
+            @Parameter(
+                    description = "Identificador do plano de aula base.",
+                    example = "1",
+                    required = true
+            )
             @PathVariable Long idPlanoBase,
+
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Critérios da adaptação do plano.",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = AdaptacaoPlanoInput.class)
+                    )
+            )
             @RequestBody @Valid AdaptacaoPlanoInput adaptacaoPlanoInput
     ) {
         return ResponseEntity
