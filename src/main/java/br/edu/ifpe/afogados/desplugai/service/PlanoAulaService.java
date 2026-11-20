@@ -11,10 +11,7 @@ import br.edu.ifpe.afogados.desplugai.entity.Usuario;
 import br.edu.ifpe.afogados.desplugai.enums.PlanoAulaOrdenacaoEnum;
 import br.edu.ifpe.afogados.desplugai.enums.StatusPublicacaoEnum;
 import br.edu.ifpe.afogados.desplugai.mapper.PlanoAulaMapper;
-import br.edu.ifpe.afogados.desplugai.repository.HabilidadeBnccRepository;
-import br.edu.ifpe.afogados.desplugai.repository.HabilidadePlanoRepository;
-import br.edu.ifpe.afogados.desplugai.repository.PlanoAulaRepository;
-import br.edu.ifpe.afogados.desplugai.repository.UsuarioRepository;
+import br.edu.ifpe.afogados.desplugai.repository.*;
 import br.edu.ifpe.afogados.desplugai.specification.PlanoAulaSpecification;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
@@ -27,7 +24,9 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PlanoAulaService {
@@ -36,14 +35,23 @@ public class PlanoAulaService {
     private final UsuarioRepository usuarioRepository;
     private final HabilidadeBnccRepository habilidadeBnccRepository;
     private final HabilidadePlanoRepository habilidadePlanoRepository;
+    private final FavoritoRepository favoritoRepository;
     private final PlanoAulaMapper planoAulaMapper;
 
 
-    public PlanoAulaService(PlanoAulaRepository planoAulaRepository, UsuarioRepository usuarioRepository, HabilidadeBnccRepository habilidadeBnccRepository, HabilidadePlanoRepository habilidadePlanoRepository, PlanoAulaMapper planoAulaMapper) {
+    public PlanoAulaService(
+            PlanoAulaRepository planoAulaRepository,
+            UsuarioRepository usuarioRepository,
+            HabilidadeBnccRepository habilidadeBnccRepository,
+            HabilidadePlanoRepository habilidadePlanoRepository,
+            FavoritoRepository favoritoRepository,
+            PlanoAulaMapper planoAulaMapper
+    ) {
         this.planoAulaRepository = planoAulaRepository;
         this.usuarioRepository = usuarioRepository;
         this.habilidadeBnccRepository = habilidadeBnccRepository;
         this.habilidadePlanoRepository = habilidadePlanoRepository;
+        this.favoritoRepository = favoritoRepository;
         this.planoAulaMapper = planoAulaMapper;
     }
 
@@ -101,7 +109,25 @@ public class PlanoAulaService {
 
     public Page<PlanoAulaDTO> listarPlanosAula(Pageable pageable) {
         Page<PlanoAula> listaPlanosAula = planoAulaRepository.findAll(pageable);
-        return listaPlanosAula.map(planoAulaMapper::toDto);
+
+        List<Long> ids = listaPlanosAula.getContent().stream()
+                .map(PlanoAula::getId)
+                .toList();
+
+        Map<Long, Long> favoritosPorPlano = new HashMap<>();
+        if (!ids.isEmpty()) {
+            for (Object[] row : favoritoRepository.contarPorPlanoIds(ids)) {
+                Long planoId = (Long) row[0];
+                Long total = (Long) row[1];
+                favoritosPorPlano.put(planoId, total);
+            }
+        }
+
+        return listaPlanosAula.map(plano -> {
+            PlanoAulaDTO dto = planoAulaMapper.toDto(plano);
+            dto.setTotalFavoritos(favoritosPorPlano.getOrDefault(plano.getId(), 0L));
+            return dto;
+        });
     }
 
     public PlanoAulaDTO buscarPlanoAula(Long id) {
@@ -109,7 +135,11 @@ public class PlanoAulaService {
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Plano de aula não encontrado"));
 
-        return planoAulaMapper.toDto(planoAula);
+        PlanoAulaDTO planoAulaDTO = planoAulaMapper.toDto(planoAula);
+        Long totalFavoritos = favoritoRepository.contarPorPlanoId(planoAula.getId());
+        planoAulaDTO.setTotalFavoritos(totalFavoritos != null ? totalFavoritos : 0L);
+
+        return planoAulaDTO;
     }
 
     public PlanoAulaDTO atualizarPlanoAula(Long id, PlanoAulaDTO planoAulaDTO) {
