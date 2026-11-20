@@ -95,4 +95,6 @@ public class PlanoAulaDTO {
     private Timestamp dataCriacao;
 
     private Timestamp dataAtualizacao;
+
+    private Long totalFavoritos = 0L;
 }
