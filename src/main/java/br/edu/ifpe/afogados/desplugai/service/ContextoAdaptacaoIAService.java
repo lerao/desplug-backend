@@ -107,6 +107,9 @@ public class ContextoAdaptacaoIAService {
         planoAulaAdaptado.setIsGeradoIA(true);
         planoAulaAdaptado.setIsDerivado(true);
         planoAulaAdaptado.setPlanoOrigem(planoBase);
+        // oculta as informações do autor do plano original ao front
+        planoAulaAdaptado.getPlanoOrigem().setAutor(null);
+
         planoAulaAdaptado.setVisualizacoes(0);
         planoAulaAdaptado.setDataCriacao(Timestamp.from(Instant.now()));
 
