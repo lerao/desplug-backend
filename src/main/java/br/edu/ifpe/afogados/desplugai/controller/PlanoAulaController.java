@@ -22,6 +22,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -335,10 +337,13 @@ public class PlanoAulaController {
                             schema = @Schema(implementation = AdaptacaoPlanoInput.class)
                     )
             )
-            @RequestBody @Valid AdaptacaoPlanoInput adaptacaoPlanoInput
+            @RequestBody @Valid AdaptacaoPlanoInput adaptacaoPlanoInput,
+            @AuthenticationPrincipal Jwt jwt
     ) {
+        Long idUsuario = Long.valueOf(jwt.getSubject());
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(contextoAdaptacaoIAService.gerarAdaptacaoIA(idPlanoBase, adaptacaoPlanoInput));
+                .body(contextoAdaptacaoIAService.gerarAdaptacaoIA(idPlanoBase, adaptacaoPlanoInput, idUsuario));
     }
 }

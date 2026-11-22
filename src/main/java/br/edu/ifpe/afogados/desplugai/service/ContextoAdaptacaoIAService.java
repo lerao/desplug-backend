@@ -56,13 +56,20 @@ public class ContextoAdaptacaoIAService {
 
     public PlanoAulaDTO gerarAdaptacaoIA(
             Long idPLanoBase,
-            AdaptacaoPlanoInput adaptacaoPlanoInput
+            AdaptacaoPlanoInput adaptacaoPlanoInput,
+            Long idUsuario
     ) {
 
         PlanoAula planoBase = planoAulaRepository
                 .findById(idPLanoBase)
                 .orElseThrow(() ->
                         new RuntimeException("Plano de aula base não encontrado")
+                );
+
+        Usuario autorPlano = usuarioRepository
+                .findById(idUsuario)
+                .orElseThrow(() ->
+                        new RuntimeException("Autor do plano não encontrado")
                 );
 
         PlanoAulaIAResponseDTO respostaIA = geminiService.adaptarPlano(
@@ -97,27 +104,36 @@ public class ContextoAdaptacaoIAService {
 
             });
             planoAulaAdaptado.setHabilidadesPlano(habilidadesPlanoGerado);
-        } else {
+        }
+
+        // preserva as habilidades do plano original
+        if(planoAulaAdaptado.getHabilidadesPlano() == null || planoAulaAdaptado.getHabilidadesPlano().isEmpty()) {
             planoAulaAdaptado.setHabilidadesPlano(planoBase.getHabilidadesPlano());
         }
 
         planoAulaAdaptado.setImagemCapa(null);
         planoAulaAdaptado.setStatusPublicacao(StatusPublicacaoEnum.PENDENTE_MODERACAO);
-        //planoAulaAdaptado.setAutor(); -- USUÁRIO DA SESSÃO
+        planoAulaAdaptado.setAutor(autorPlano);
         planoAulaAdaptado.setIsGeradoIA(true);
         planoAulaAdaptado.setIsDerivado(true);
         planoAulaAdaptado.setPlanoOrigem(planoBase);
-        // oculta as informações do autor do plano original ao front
-        planoAulaAdaptado.getPlanoOrigem().setAutor(null);
+        planoAulaAdaptado.setVisualizacoes(0);
+        planoAulaAdaptado.setDataCriacao(Timestamp.from(Instant.now()));
 
         planoAulaAdaptado.setVisualizacoes(0);
         planoAulaAdaptado.setDataCriacao(Timestamp.from(Instant.now()));
 
-        // cria a instancia do contexto de adaptação e salva
         ContextoAdaptacaoIA contextoAdaptacaoIA = new ContextoAdaptacaoIA();
 
+        PlanoAulaDTO responseDto = planoAulaMapper.toDto(planoAulaAdaptado);
+        responseDto.setId(null);
 
-        return planoAulaMapper.toDto(planoAulaAdaptado);
+        if (responseDto.getPlanoOrigem() != null) {
+            responseDto.getPlanoOrigem().setAutor(null);
+        }
+
+        return responseDto;
+
     }
 
     public ContextoAdaptacaoIADTO salvarContextoAdaptacaoIA(
