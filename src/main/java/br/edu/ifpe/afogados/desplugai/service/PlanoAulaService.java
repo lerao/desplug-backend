@@ -83,6 +83,10 @@ public class PlanoAulaService {
         planoAula.setVisualizacoes(0);
         planoAula.setAutor(autorPlano);
         planoAula.setPlanoOrigem(planoOrigem);
+        // oculta o autor do plano de origem, o front não precisa saber
+        if(planoAula.getPlanoOrigem() != null) {
+            planoAula.getPlanoOrigem().setAutor(null);
+        }
 
         PlanoAula planoAulaSalvo = planoAulaRepository.save(planoAula);
 
