@@ -83,29 +83,22 @@ public class PlanoAulaService {
             }
         });
 
-
-
         PlanoAula planoAula = planoAulaMapper.toEntity(planoAulaDTO);
         planoAula.setDataCriacao(Timestamp.from(Instant.now()));
         planoAula.setStatusPublicacao(StatusPublicacaoEnum.PENDENTE_MODERACAO);
         planoAula.setVisualizacoes(0);
         planoAula.setAutor(autorPlano);
         planoAula.setPlanoOrigem(planoOrigem);
-        // oculta o autor do plano de origem, o front não precisa saber
-        if(planoAula.getPlanoOrigem() != null) {
-            planoAula.getPlanoOrigem().setAutor(null);
-        }
 
         PlanoAula planoAulaSalvo = planoAulaRepository.save(planoAula);
 
         List<HabilidadePlano> habilidadesPlano = new ArrayList<>();
-        habilidadesBncc.forEach(habilidade -> {
-            HabilidadePlano habilidadePlanoSalva = new HabilidadePlano();
-            habilidadePlanoSalva.setPlano(planoAulaSalvo);
-            habilidadePlanoSalva.setHabilidade(habilidade);
-            habilidadesPlano.add(habilidadePlanoSalva);
-        });
-
+        for (HabilidadeBncc habilidade : habilidadesBncc) {
+            HabilidadePlano novoItem = new HabilidadePlano();
+            novoItem.setPlano(planoAulaSalvo);
+            novoItem.setHabilidade(habilidade);
+            habilidadesPlano.add(novoItem);
+        }
         habilidadePlanoRepository.saveAll(habilidadesPlano);
 
         return planoAulaMapper.toDto(planoAulaSalvo);
