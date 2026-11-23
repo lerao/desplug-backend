@@ -1,6 +1,7 @@
 package br.edu.ifpe.afogados.desplugai.controller;
 
 import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
+import br.edu.ifpe.afogados.desplugai.dto.ProfessorAfiliacaoDTO;
 import br.edu.ifpe.afogados.desplugai.dto.UsuarioDTO;
 import br.edu.ifpe.afogados.desplugai.enums.StatusHomologacaoEnum;
 import br.edu.ifpe.afogados.desplugai.service.UsuarioService;
@@ -20,6 +21,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -250,5 +253,33 @@ public class UsuarioController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(usuarioService.alterarStatusUsuario(id, status));
+    }
+
+
+    @GetMapping("/perfil")
+    @Operation(
+            summary = "Obter perfil do usuário",
+            description = "Retorna o perfil de um usuário existente do sistema."
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Perfil do usuário retornado com sucesso.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ProfessorAfiliacaoDTO.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Usuário não encontrado.",
+                    content = @Content
+            )
+    })
+    public ResponseEntity<ProfessorAfiliacaoDTO> obterPerfilUsuario(
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        Long idUsuario = Long.valueOf(jwt.getSubject());
+        return ResponseEntity.ok(usuarioService.obterPerfilUsuario(idUsuario));
     }
 }
