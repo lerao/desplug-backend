@@ -2,6 +2,7 @@ package br.edu.ifpe.afogados.desplugai.service;
 
 import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
 import br.edu.ifpe.afogados.desplugai.dto.PerfilUsuarioDTO;
+import br.edu.ifpe.afogados.desplugai.dto.ProfessorAfiliacaoDTO;
 import br.edu.ifpe.afogados.desplugai.dto.UsuarioDTO;
 import br.edu.ifpe.afogados.desplugai.entity.PerfilUsuario;
 import br.edu.ifpe.afogados.desplugai.entity.ProfessorAfiliacao;
@@ -10,6 +11,7 @@ import br.edu.ifpe.afogados.desplugai.entity.Usuario;
 import br.edu.ifpe.afogados.desplugai.enums.PerfilGlobalEnum;
 import br.edu.ifpe.afogados.desplugai.enums.StatusAfiliacaoEnum;
 import br.edu.ifpe.afogados.desplugai.enums.StatusHomologacaoEnum;
+import br.edu.ifpe.afogados.desplugai.mapper.ProfessorAfiliacaoMapper;
 import br.edu.ifpe.afogados.desplugai.mapper.UsuarioMapper;
 import br.edu.ifpe.afogados.desplugai.repository.PerfilUsuarioRepository;
 import br.edu.ifpe.afogados.desplugai.repository.ProfessorAfiliacaoRepository;
@@ -33,6 +35,7 @@ public class UsuarioService {
     private final PerfilUsuarioRepository perfilUsuarioRepository;
     private final ProfessorAfiliacaoRepository professorAfiliacaoRepository;
     private final UsuarioMapper usuarioMapper;
+    private final ProfessorAfiliacaoMapper professorAfiliacaoMapper;
     private final PasswordEncoder passwordEncoder;
     private final UsuarioAutenticadoService usuarioAutenticadoService;
 
@@ -41,6 +44,7 @@ public class UsuarioService {
             PerfilUsuarioRepository perfilUsuarioRepository,
             ProfessorAfiliacaoRepository professorAfiliacaoRepository,
             UsuarioMapper usuarioMapper,
+            ProfessorAfiliacaoMapper professorAfiliacaoMapper,
             PasswordEncoder passwordEncoder,
             UsuarioAutenticadoService usuarioAutenticadoService
     ) {
@@ -48,6 +52,7 @@ public class UsuarioService {
         this.perfilUsuarioRepository = perfilUsuarioRepository;
         this.professorAfiliacaoRepository = professorAfiliacaoRepository;
         this.usuarioMapper = usuarioMapper;
+        this.professorAfiliacaoMapper = professorAfiliacaoMapper;
         this.passwordEncoder = passwordEncoder;
         this.usuarioAutenticadoService = usuarioAutenticadoService;
     }
@@ -154,5 +159,21 @@ public class UsuarioService {
                 HttpStatus.OK.value(),
                 "Status do usuário alterado alterado para: %s.".formatted(status)
         );
+    }
+
+    public ProfessorAfiliacaoDTO obterPerfilUsuario(Long idUsuario) {
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        Optional<ProfessorAfiliacao> professorAfiliacao = professorAfiliacaoRepository.findByProfessor_Id(idUsuario);
+
+        ProfessorAfiliacaoDTO professorAfiliacaoDTO = new ProfessorAfiliacaoDTO();
+
+        if(professorAfiliacao.isEmpty()) {
+            professorAfiliacaoDTO.setProfessor(usuarioMapper.toDto(usuario));
+        } else {
+            professorAfiliacaoDTO = professorAfiliacaoMapper.toDto(professorAfiliacao.get());
+        }
+        return professorAfiliacaoDTO;
     }
 }
