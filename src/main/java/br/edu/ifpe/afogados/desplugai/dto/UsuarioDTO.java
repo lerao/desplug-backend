@@ -4,6 +4,7 @@ package br.edu.ifpe.afogados.desplugai.dto;
 import br.edu.ifpe.afogados.desplugai.enums.PerfilGlobalEnum;
 import br.edu.ifpe.afogados.desplugai.enums.StatusHomologacaoEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -38,7 +39,7 @@ public class UsuarioDTO {
     @Email(message = "O e-mail do usuário deve ser válido.")
     private String email;
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank(message = "A senha do usuário é de preenchimento obrigatório.")
     private String senha;
 
