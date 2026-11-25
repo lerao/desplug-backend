@@ -1,132 +1,208 @@
 <!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
-<jasperReport name="planoAula" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ed64fe2e-1340-4d17-86db-064770edf584">
-	<query language="sql"><![CDATA[]]></query>
-	<field name="titulo" class="java.lang.String"/>
-	<field name="tipoAtividade" class="java.lang.String"/>
-	<field name="etapaEnsino" class="java.lang.String"/>
-	<field name="anosIndicados" class="java.lang.String"/>
+<jasperReport name="PlanoDeAula" language="java" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="16" bottomMargin="24" uuid="09d5238b-f29c-4e76-b6df-9df492fccc04">
+	<parameter name="LOGO_INSTITUICAO" class="java.io.InputStream"/>
+	<parameter name="NOME_INSTITUICAO" class="java.lang.String">
+		<defaultValueExpression><![CDATA["[ Nome da Instituição ]"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="NOME_PROFESSOR" class="java.lang.String">
+		<defaultValueExpression><![CDATA["[ Nome do Professor ]"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATA_AULA" class="java.lang.String">
+		<defaultValueExpression><![CDATA["[ DD/MM/AAAA ]"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CARGA_HORARIA" class="java.lang.String">
+		<defaultValueExpression><![CDATA["[ 50 min ]"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="NOME_DISCIPLINA" class="java.lang.String">
+		<defaultValueExpression><![CDATA["[ Nome da Disciplina ]"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TURMA_ANO" class="java.lang.String">
+		<defaultValueExpression><![CDATA["[ Ex: 1º Ano Ensino Médio ]"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="HABILIDADE_BNCC" class="java.lang.String">
+		<defaultValueExpression><![CDATA["[ Ex: EF01CO01 ]"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TEMA_AULA" class="java.lang.String">
+		<defaultValueExpression><![CDATA["[ Título Principal da Aula ]"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="OBJETIVOS" class="java.lang.String">
+		<defaultValueExpression><![CDATA["[ Descreva o que os alunos deverão ser capazes de compreender ou desenvolver ao término da aula. ]"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="METODOLOGIA" class="java.lang.String">
+		<defaultValueExpression><![CDATA["[ Passo a passo da aula: introdução teórica, dinâmica em sala e aplicação prática orientada. ]"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="RECURSOS" class="java.lang.String">
+		<defaultValueExpression><![CDATA["[ Ex: Projetor multimídia ]\n[ Ex: Computadores com acesso web ]"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CRITERIOS_AVALIACAO" class="java.lang.String">
+		<defaultValueExpression><![CDATA["[ Formas de acompanhamento: participação, compreensão dos conceitos e entrega da atividade proposta. ]"]]></defaultValueExpression>
+	</parameter>
+	<field name="nomeProfessor" class="java.lang.String"/>
+	<field name="dataPlano" class="java.lang.String"/>
 	<field name="duracao" class="java.lang.String"/>
 	<field name="componentesCurriculares" class="java.lang.String"/>
-	<field name="materiaisNecessarios" class="java.lang.String"/>
+	<field name="anosIndicados" class="java.lang.String"/>
+	<field name="habilidadeBncc" class="java.lang.String"/>
+	<field name="tituloPlano" class="java.lang.String"/>
+	<field name="resumoPlano" class="java.lang.String"/>
 	<field name="metodologia" class="java.lang.String"/>
 	<field name="criteriosAvaliacao" class="java.lang.String"/>
-	<background splitType="Stretch"/>
-	<title height="79" splitType="Stretch"/>
+	<field name="materiaisNecessarios" class="java.lang.String"/>
+	<title height="120" splitType="Prevent">
+		<element kind="rectangle" uuid="885c7233-ef21-4c62-81ce-7272139f3625" mode="Opaque" x="10" y="0" width="165" height="56" backcolor="#ECFDF5">
+			<printWhenExpression><![CDATA[$P{LOGO_INSTITUICAO} == null]]></printWhenExpression>
+			<pen lineWidth="0.75" lineStyle="Dashed" lineColor="#CBD5E1"/>
+		</element>
+		<element kind="staticText" uuid="0bff420c-3009-4e81-a5d5-cf0484b771ff" x="10" y="26" width="165" height="12" forecolor="#64748B" fontName="SansSerif" fontSize="8.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" bold="true" hTextAlign="Center">
+			<printWhenExpression><![CDATA[$P{LOGO_INSTITUICAO} == null]]></printWhenExpression>
+			<text><![CDATA[[ Logo da Instituição ]]]></text>
+		</element>
+		<element kind="image" uuid="92a3d775-661a-488b-b3d8-a44aa2a87090" x="10" y="0" width="165" height="56" scaleImage="RetainShape" onErrorType="Blank" hImageAlign="Center" vImageAlign="Middle">
+			<printWhenExpression><![CDATA[$P{LOGO_INSTITUICAO} != null]]></printWhenExpression>
+			<expression><![CDATA[$P{LOGO_INSTITUICAO}]]></expression>
+		</element>
+		<element kind="textField" uuid="1474b9ae-a2bb-4789-a8fe-ab194489b868" x="186" y="24" width="329" height="14" forecolor="#0F172A" fontName="SansSerif" fontSize="11.0" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" blankWhenNull="true" bold="true">
+			<expression><![CDATA[$P{NOME_INSTITUICAO}]]></expression>
+		</element>
+		<element kind="line" uuid="af552981-c6df-4bf6-a67e-00b4e4f5188b" x="10" y="64" width="505" height="1" forecolor="#10B981">
+			<pen lineWidth="1.5" lineColor="#10B981"/>
+		</element>
+		<element kind="staticText" uuid="f5ef8c2e-5333-43b3-a87a-0ec5fb343b7d" x="7" y="80" width="200" height="14" forecolor="#0F172A" fontName="SansSerif" fontSize="10.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" bold="true">
+			<text><![CDATA[Plano de Aula]]></text>
+		</element>
+	</title>
 	<detail>
-		<band height="470" splitType="Stretch">
-			<element kind="staticText" uuid="07468c2a-c0e3-4d2a-9a4d-dbc454b45510" x="-20" y="0" width="50" height="30" fontName="Arial" fontSize="14.0" bold="true" vTextAlign="Middle">
-				<paragraph leftIndent="5"/>
-				<text><![CDATA[Título:]]></text>
-				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+		<band height="79" splitType="Prevent">
+			<element kind="frame" uuid="5a3719a4-26ab-4c4b-97b2-253146ebf64b" mode="Opaque" x="0" y="0" width="515" height="59" backcolor="#FFF7ED">
+				<element kind="staticText" uuid="2ebf1de2-6b16-422f-b838-44ee0b543f1a" x="11" y="13" width="150" height="10" forecolor="#C2410C" fontName="SansSerif" fontSize="7.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" bold="true">
+					<text><![CDATA[PROFESSOR(A)]]></text>
+				</element>
+				<element kind="textField" uuid="d956e18a-3694-493c-8b90-e032f7dfd71f" x="11" y="32" width="270" height="13" forecolor="#0F172A" fontName="SansSerif" fontSize="9.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" textAdjust="StretchHeight" blankWhenNull="true" bold="true">
+					<expression><![CDATA[$F{nomeProfessor}]]></expression>
+				</element>
+				<element kind="staticText" uuid="3f854315-6842-44fd-a451-8d629fbe787a" x="285" y="13" width="100" height="10" forecolor="#C2410C" fontName="SansSerif" fontSize="7.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" bold="true">
+					<text><![CDATA[DATA]]></text>
+				</element>
+				<element kind="textField" uuid="f7b6b9c7-5e49-4bc2-bf00-ed3235e2aa63" x="285" y="32" width="100" height="13" forecolor="#0F172A" fontName="SansSerif" fontSize="9.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" textAdjust="StretchHeight" blankWhenNull="true" bold="true">
+					<expression><![CDATA[$F{dataPlano}]]></expression>
+				</element>
+				<element kind="staticText" uuid="949e0198-1259-45c5-938a-3b337379bf29" x="399" y="13" width="110" height="10" forecolor="#C2410C" fontName="SansSerif" fontSize="7.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" bold="true">
+					<text><![CDATA[CARGA HORÁRIA]]></text>
+				</element>
+				<element kind="textField" uuid="13331acd-3666-4f33-a7f0-27b859a1bc08" x="399" y="32" width="110" height="13" forecolor="#0F172A" fontName="SansSerif" fontSize="9.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" textAdjust="StretchHeight" blankWhenNull="true" bold="true">
+					<expression><![CDATA[$F{duracao}]]></expression>
+				</element>
+				<box>
+					<pen lineWidth="1.0" lineColor="#FED7AA"/>
+				</box>
 			</element>
-			<element kind="textField" uuid="5071bf56-d4bf-46aa-a4a6-59567f3228e9" x="30" y="0" width="545" height="30" fontName="Arial" fontSize="14.0" vTextAlign="Middle">
-				<paragraph leftIndent="5"/>
-				<expression><![CDATA[$F{titulo}]]></expression>
-				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+		</band>
+		<band height="84" splitType="Prevent">
+			<element kind="frame" uuid="bb1bee16-e23f-4ed6-8063-7b60e3c55eca" mode="Opaque" x="0" y="0" width="515" height="59" backcolor="#F0FDF4">
+				<element kind="staticText" uuid="58cd97c6-bc4a-47a7-9bdc-865251eb00ea" x="11" y="6" width="190" height="10" forecolor="#15803D" fontName="SansSerif" fontSize="7.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" bold="true">
+					<text><![CDATA[DISCIPLINA / COMPONENTE]]></text>
+				</element>
+				<element kind="textField" uuid="651be3f4-291b-4ba0-92fa-eeb4244b41f2" x="11" y="23" width="190" height="13" forecolor="#166534" fontName="SansSerif" fontSize="9.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" textAdjust="StretchHeight" blankWhenNull="true" bold="true">
+					<expression><![CDATA[$F{componentesCurriculares}]]></expression>
+				</element>
+				<element kind="staticText" uuid="8a0a63f9-28ca-420f-a389-8ba3f55c4d98" x="210" y="6" width="140" height="10" forecolor="#15803D" fontName="SansSerif" fontSize="7.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" bold="true">
+					<text><![CDATA[TURMA / ANO]]></text>
+				</element>
+				<element kind="textField" uuid="889e95c6-3c33-4221-a9bc-66c2a5bb31c1" x="210" y="23" width="140" height="13" forecolor="#166534" fontName="SansSerif" fontSize="9.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" textAdjust="StretchHeight" blankWhenNull="true" bold="true">
+					<expression><![CDATA[$F{anosIndicados}]]></expression>
+				</element>
+				<element kind="staticText" uuid="e390cdf0-9635-4f3a-97cd-aeb5262625e8" x="361" y="6" width="144" height="10" forecolor="#15803D" fontName="SansSerif" fontSize="7.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" bold="true">
+					<text><![CDATA[HABILIDADE BNCC]]></text>
+				</element>
+				<element kind="textField" uuid="1d50557c-c76c-4b03-9f24-b1c4b9b70ba3" x="361" y="23" width="144" height="13" forecolor="#166534" fontName="SansSerif" fontSize="9.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" textAdjust="StretchHeight" blankWhenNull="true" bold="true">
+					<expression><![CDATA[$F{habilidadeBncc}]]></expression>
+				</element>
+				<box>
+					<pen lineWidth="1.0" lineColor="#BBF7D0"/>
+				</box>
 			</element>
-			<element kind="staticText" uuid="e79ddc57-5b8a-4d28-bf52-9c2a1e438eb1" x="-20" y="30" width="130" height="30" fontName="Arial" fontSize="14.0" bold="true" vTextAlign="Middle">
-				<paragraph leftIndent="5"/>
-				<text><![CDATA[Tipo de Atividade:]]></text>
-				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+		</band>
+		<band height="89" splitType="Prevent">
+			<element kind="frame" uuid="541e5031-6f59-4bc4-9b2b-584a174373f5" mode="Opaque" x="0" y="0" width="515" height="56" backcolor="#FFFBEB">
+				<element kind="staticText" uuid="54f142dd-20c8-4179-8e0d-f535df078b68" x="13" y="13" width="300" height="12" forecolor="#B45309" fontName="SansSerif" fontSize="8.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" bold="true">
+					<text><![CDATA[TEMA / ASSUNTO DA AULA]]></text>
+				</element>
+				<element kind="textField" uuid="cd552a33-d04c-4008-b126-d5886839d067" x="13" y="31" width="490" height="16" forecolor="#1E293B" fontName="SansSerif" fontSize="9.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" textAdjust="StretchHeight" blankWhenNull="true" bold="true">
+					<expression><![CDATA[$F{tituloPlano}]]></expression>
+				</element>
+				<box>
+					<pen lineWidth="1.5" lineColor="#FDE68A"/>
+					<leftPen lineWidth="3.0" lineColor="#EA580C"/>
+				</box>
 			</element>
-			<element kind="textField" uuid="2e294bc8-983b-4951-b12e-2caafb66f40d" x="110" y="30" width="465" height="30" fontName="Arial" fontSize="14.0" vTextAlign="Middle">
-				<paragraph leftIndent="5" rightIndent="5"/>
-				<expression><![CDATA[$F{tipoAtividade}]]></expression>
-				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-				<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+		</band>
+		<band height="77" splitType="Prevent">
+			<element kind="frame" uuid="3f771b98-7a1b-44e9-9265-9a15b37eab78" mode="Opaque" x="0" y="0" width="515" height="68" backcolor="#FFFFFF">
+				<element kind="staticText" uuid="cff3aa70-fbc9-40b6-af49-bb469d92a20c" x="11" y="18" width="400" height="12" forecolor="#1E3A8A" fontName="SansSerif" fontSize="8.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" bold="true">
+					<text><![CDATA[RESUMO DO PLANO]]></text>
+				</element>
+				<element kind="textField" uuid="b02d2aa5-6e84-4a2f-9e8b-ffa0d2b8c118" x="11" y="39" width="493" height="16" forecolor="#334155" fontName="SansSerif" fontSize="9.0" pdfFontName="Helvetica" pdfEncoding="Cp1252" textAdjust="StretchHeight" blankWhenNull="true">
+					<paragraph lineSpacing="1_1_2"/>
+					<expression><![CDATA[$F{resumoPlano}]]></expression>
+				</element>
+				<box>
+					<pen lineWidth="1.0" lineColor="#CBD5E1"/>
+					<topPen lineWidth="4.0" lineColor="#1E3A8A"/>
+				</box>
 			</element>
-			<element kind="staticText" uuid="cabcc0a5-3592-4bf1-a994-0fd8d6ca3d14" x="-20" y="60" width="122" height="30" fontName="Arial" fontSize="14.0" bold="true" vTextAlign="Middle">
-				<paragraph leftIndent="5"/>
-				<text><![CDATA[Etapa de Ensino:]]></text>
-				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		</band>
+		<band height="102" splitType="Prevent">
+			<element kind="frame" uuid="e0f857b9-4278-4f68-982f-d6dfdaf28111" mode="Opaque" x="0" y="0" width="515" height="69" backcolor="#FFFFFF">
+				<element kind="staticText" uuid="0810cd85-4e60-451e-a538-cec60b1ff87f" x="11" y="15" width="400" height="12" forecolor="#047857" fontName="SansSerif" fontSize="8.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" bold="true">
+					<text><![CDATA[METODOLOGIA / DESENVOLVIMENTO]]></text>
+				</element>
+				<element kind="textField" uuid="04b1b920-ebdd-4b48-a9a6-7ff9fb9969ee" x="11" y="39" width="493" height="16" forecolor="#334155" fontName="SansSerif" fontSize="9.0" pdfFontName="Helvetica" pdfEncoding="Cp1252" textAdjust="StretchHeight" blankWhenNull="true">
+					<paragraph lineSpacing="1_1_2"/>
+					<expression><![CDATA[$F{metodologia}]]></expression>
+				</element>
+				<box>
+					<pen lineWidth="1.0" lineColor="#CBD5E1"/>
+					<topPen lineWidth="4.0" lineColor="#10B981"/>
+				</box>
 			</element>
-			<element kind="textField" uuid="577c9f36-7cdd-4e63-bff8-1e55a69e1946" x="102" y="60" width="473" height="30" fontName="Arial" fontSize="14.0" vTextAlign="Middle">
-				<paragraph leftIndent="5" rightIndent="5"/>
-				<expression><![CDATA[$F{etapaEnsino}]]></expression>
-				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-				<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
+		</band>
+		<band height="109" splitType="Prevent">
+			<element kind="frame" uuid="19be6120-ec34-459b-acd2-98d2a6f2ff8d" mode="Opaque" x="0" y="0" width="255" height="109" backcolor="#FFFFFF">
+				<element kind="staticText" uuid="eae99309-6e0e-4306-b883-cf1b845633d8" x="11" y="18" width="230" height="12" forecolor="#1E3A8A" fontName="SansSerif" fontSize="8.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" bold="true">
+					<text><![CDATA[RECURSOS E MATERIAIS]]></text>
+				</element>
+				<element kind="textField" uuid="57fd5064-5e79-4dd1-8a21-f4c53e92ab81" x="11" y="38" width="233" height="16" forecolor="#334155" fontName="SansSerif" fontSize="9.0" pdfFontName="Helvetica" pdfEncoding="Cp1252" textAdjust="StretchHeight" blankWhenNull="true">
+					<expression><![CDATA[$F{materiaisNecessarios} == null ? "" : "• " + $F{materiaisNecessarios}.replace("\n", "\n\n• ")]]></expression>
+				</element>
+				<box>
+					<pen lineWidth="1.0" lineColor="#CBD5E1"/>
+					<topPen lineWidth="4.0" lineColor="#1E3A8A"/>
+				</box>
 			</element>
-			<element kind="staticText" uuid="2c2b0c9b-63f2-4815-93af-cfa812f000ed" x="-20" y="90" width="116" height="30" fontName="Arial" fontSize="14.0" bold="true" vTextAlign="Middle">
-				<paragraph leftIndent="5"/>
-				<text><![CDATA[Anos Indicados:]]></text>
-				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<element kind="frame" uuid="45dba678-419c-41d0-a32c-3e9eeb413426" mode="Opaque" x="261" y="0" width="254" height="109" backcolor="#FFFFFF">
+				<element kind="staticText" uuid="74ca1f9c-d260-4b9b-9255-e9a59226c2fc" x="11" y="15" width="230" height="12" forecolor="#047857" fontName="SansSerif" fontSize="8.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" bold="true">
+					<text><![CDATA[CRITÉRIOS DE AVALIAÇÃO]]></text>
+				</element>
+				<element kind="textField" uuid="c158e348-c5d7-45cb-9cd3-942ec0eaddd4" x="11" y="38" width="232" height="16" forecolor="#334155" fontName="SansSerif" fontSize="9.0" pdfFontName="Helvetica" pdfEncoding="Cp1252" textAdjust="StretchHeight" blankWhenNull="true">
+					<paragraph lineSpacing="1_1_2"/>
+					<expression><![CDATA[$F{criteriosAvaliacao}]]></expression>
+				</element>
+				<box>
+					<pen lineWidth="1.0" lineColor="#CBD5E1"/>
+					<topPen lineWidth="4.0" lineColor="#10B981"/>
+				</box>
 			</element>
-			<element kind="textField" uuid="9f014849-043e-43b2-bbaa-0497be5d9969" x="96" y="90" width="184" height="30" fontName="Arial" fontSize="14.0" vTextAlign="Middle">
-				<paragraph leftIndent="5"/>
-				<expression><![CDATA[$F{anosIndicados}]]></expression>
-				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-			</element>
-			<element kind="staticText" uuid="4881dc63-818a-412d-9642-492b7c71de3d" x="280" y="90" width="70" height="30" fontName="Arial" fontSize="14.0" bold="true" vTextAlign="Middle">
-				<paragraph leftIndent="5"/>
-				<text><![CDATA[Duração:]]></text>
-				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-				<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			</element>
-			<element kind="textField" uuid="1191b11f-7717-4d36-8ab1-f5fbd5f5e29b" x="350" y="90" width="225" height="30" fontName="Arial" fontSize="14.0" vTextAlign="Middle">
-				<paragraph leftIndent="5" rightIndent="5"/>
-				<expression><![CDATA[$F{duracao}]]></expression>
-				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-				<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
-			</element>
-			<element kind="staticText" uuid="b4e7f9d2-9650-4092-98f3-47820ebcccfa" x="-20" y="120" width="190" height="30" fontName="Arial" fontSize="14.0" bold="true" vTextAlign="Middle">
-				<paragraph leftIndent="5"/>
-				<text><![CDATA[Componentes Curriculares:]]></text>
-				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-				<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			</element>
-			<element kind="textField" uuid="894078f0-b4c5-4019-9265-733cbbad8bf4" x="170" y="120" width="404" height="30" fontName="Arial" fontSize="14.0" vTextAlign="Middle">
-				<paragraph leftIndent="5" rightIndent="5"/>
-				<expression><![CDATA[$F{componentesCurriculares}]]></expression>
-				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-				<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
-			</element>
-			<element kind="staticText" uuid="8f2bd06c-18e8-4883-b2fa-84fea21adcd5" x="-20" y="150" width="160" height="30" fontName="Arial" fontSize="14.0" bold="true" vTextAlign="Middle">
-				<paragraph leftIndent="5"/>
-				<text><![CDATA[Materiais Necessários:]]></text>
-				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-				<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			</element>
-			<element kind="textField" uuid="731b9705-d7d9-49c0-87ea-8f333f90145b" x="-20" y="180" width="594" height="50" fontName="Arial" fontSize="14.0" hTextAlign="Justified" vTextAlign="Top">
-				<paragraph leftIndent="5" rightIndent="5"/>
-				<expression><![CDATA[$F{materiaisNecessarios}]]></expression>
-				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-				<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
-			</element>
-			<element kind="staticText" uuid="22022607-3ab5-4e39-a426-71c0d26893d6" x="-20" y="230" width="160" height="30" fontName="Arial" fontSize="14.0" bold="true" vTextAlign="Middle">
-				<paragraph leftIndent="5"/>
-				<text><![CDATA[Metodologia:]]></text>
-				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-				<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			</element>
-			<element kind="textField" uuid="dd38277b-e954-4226-89b5-0187db6f6b38" x="-20" y="260" width="594" height="90" markup="styled" fontName="Arial" fontSize="14.0" hTextAlign="Justified" vTextAlign="Top">
-				<paragraph firstLineIndent="0" leftIndent="5" rightIndent="5"/>
-				<expression><![CDATA[$F{metodologia}]]></expression>
-				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-				<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
-				<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
-			</element>
-			<element kind="staticText" uuid="43f21e76-cec1-41d1-8b2b-c92e057f4dd3" x="-20" y="350" width="160" height="30" fontName="Arial" fontSize="14.0" bold="true" vTextAlign="Middle">
-				<paragraph leftIndent="5"/>
-				<text><![CDATA[Critérios de Avaliação:]]></text>
-				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-				<property name="com.jaspersoft.studio.unit.width" value="px"/>
-			</element>
-			<element kind="textField" uuid="ff8e7f09-bc9f-481e-b09e-6685926c26f5" x="-20" y="380" width="594" height="90" markup="styled" fontName="Arial" fontSize="14.0" hTextAlign="Justified" vTextAlign="Top">
-				<paragraph firstLineIndent="5" leftIndent="5"/>
-				<expression><![CDATA[$F{criteriosAvaliacao}]]></expression>
-				<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
-				<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
-			</element>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 		</band>
 	</detail>
-	<pageFooter height="54" splitType="Stretch">
-		<element kind="staticText" uuid="90a7054c-3e1d-48bb-9fd9-6cad7b5e8275" x="-20" y="0" width="100" height="30" fontName="Arial" fontSize="8.0" bold="true">
-			<paragraph leftIndent="5"/>
-			<text><![CDATA[Gerado por DesplugAI]]></text>
-			<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+	<pageFooter height="30" splitType="Prevent">
+		<element kind="staticText" uuid="f1e2c923-e6ca-4648-86d0-e7728f673238" x="6" y="7" width="130" height="12" forecolor="#047857" fontName="SansSerif" fontSize="9.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" bold="true">
+			<text><![CDATA[Gerado por desplugAI]]></text>
+		</element>
+		<element kind="textField" uuid="009e32d4-4ec5-4d1a-b4c6-00d4379b4b06" x="383" y="9" width="120" height="11" forecolor="#64748B" fontName="SansSerif" fontSize="8.0" pdfFontName="Helvetica" pdfEncoding="Cp1252" hTextAlign="Right">
+			<expression><![CDATA["Página " + $V{PAGE_NUMBER} + " de"]]></expression>
+		</element>
+		<element kind="textField" uuid="ef0f6670-2b8d-44d7-9a18-00c9ca079338" x="503" y="9" width="12" height="11" forecolor="#64748B" fontName="SansSerif" fontSize="8.0" pdfFontName="Helvetica" pdfEncoding="Cp1252" evaluationTime="Report">
+			<expression><![CDATA[" " + $V{PAGE_NUMBER}]]></expression>
 		</element>
 	</pageFooter>
 </jasperReport>
