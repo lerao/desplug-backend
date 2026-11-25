@@ -13,8 +13,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PlanoAulaReportDTO {
 
-    private String titulo;
-    private String resumo;
+    private String tituloPlano;
+    private String nomeProfessor;
+    private String dataPlano;
+    private String resumoPlano;
     private String tipoAtividade;
     private String etapaEnsino;
     private String anosIndicados;
@@ -23,4 +25,5 @@ public class PlanoAulaReportDTO {
     private String materiaisNecessarios;
     private String metodologia;
     private String criteriosAvaliacao;
+    private String habilidadeBncc;
 }

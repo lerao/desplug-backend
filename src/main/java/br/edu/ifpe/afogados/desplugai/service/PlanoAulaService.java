@@ -192,15 +192,17 @@ public class PlanoAulaService {
                 .orElseThrow(() -> new RuntimeException("Plano de aula não encontrado com ID: " + idPlano));
 
         PlanoAulaReportDTO dto = new PlanoAulaReportDTO();
-        dto.setTitulo(planoAula.getTitulo());
-        dto.setTipoAtividade(planoAula.getTipoAtividade().getDescricao());
-        dto.setEtapaEnsino(planoAula.getEtapaEnsino().getDescricao());
-        dto.setAnosIndicados(planoAula.getAnosIndicados());
+        dto.setTituloPlano(planoAula.getTitulo());
+        dto.setNomeProfessor(planoAula.getAutor().getNome());
+        dto.setDataPlano(planoAula.getDataCriacao().toString());
         dto.setDuracao(planoAula.getDuracao());
         dto.setComponentesCurriculares(planoAula.getComponentesCurriculares());
-        dto.setMateriaisNecessarios(planoAula.getMateriaisNecessarios());
+        dto.setAnosIndicados(planoAula.getAnosIndicados());
+        dto.setHabilidadeBncc(planoAula.getHabilidadesPlano().get(0).getHabilidade().getCodigo());
+        dto.setResumoPlano(planoAula.getResumo());
         dto.setMetodologia(planoAula.getMetodologia());
         dto.setCriteriosAvaliacao(planoAula.getCriteriosAvaliacao());
+        dto.setMateriaisNecessarios(planoAula.getMateriaisNecessarios());
 
         JRBeanCollectionDataSource dataSource =
                 new JRBeanCollectionDataSource(Collections.singletonList(dto));
