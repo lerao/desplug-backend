@@ -29,7 +29,6 @@ public class HabilidadeBnccDTO {
     @NotBlank(message = "A descrição da habilidade é de preenchimento obrigatório.")
     private String descricao;
 
-    @NotNull(message = "O eixo de computação é de preenchimento obrigatório.")
     private EixoComputacaoEnum eixoComputacao;
 
     @NotNull(message = "A etapa de ensino é de preenchimento obrigatório.")
@@ -40,4 +39,6 @@ public class HabilidadeBnccDTO {
 
     @NotBlank(message = "O componente curricular é de preenchimento obrigatório.")
     private String componenteCurricular;
+
+    private String objetoConhecimento;
 }

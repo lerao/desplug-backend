@@ -29,9 +29,9 @@ public class ContextoAdaptacaoIADTO {
     private Long id;
 
     @NotNull(message = "O professor é de preenchimento obrigatório.")
-    private Usuario professor;
+    private Long idProfessor;
 
-    private PlanoAula planoBase;
+    private Long idPlanoBase;
 
     private PlanoAula planoGerado;
 

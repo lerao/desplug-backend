@@ -24,10 +24,10 @@ public class ProfessorAfiliacaoDTO {
     private Long id;
 
     @NotNull(message = "O professor é de preenchimento obrigatório.")
-    private Usuario professor;
+    private UsuarioDTO professor;
 
     @NotNull(message = "A secretaria é de preenchimento obrigatório.")
-    private SecretariaEducacao secretaria;
+    private SecretariaEducacaoDTO secretaria;
 
     private StatusAfiliacaoEnum status;
 

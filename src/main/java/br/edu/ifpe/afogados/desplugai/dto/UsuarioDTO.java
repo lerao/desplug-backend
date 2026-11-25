@@ -3,6 +3,7 @@ package br.edu.ifpe.afogados.desplugai.dto;
 
 import br.edu.ifpe.afogados.desplugai.enums.PerfilGlobalEnum;
 import br.edu.ifpe.afogados.desplugai.enums.StatusHomologacaoEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -11,13 +12,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @JsonPropertyOrder({
         "id",
         "nome",
         "email",
         "senha",
-        "perfilGlobal",
+        "perfisUsuario",
         "statusHomologacao",
         "dataRegistro",
         "dataHomologacao",
@@ -36,11 +38,12 @@ public class UsuarioDTO {
     @Email(message = "O e-mail do usuário deve ser válido.")
     private String email;
 
+    @JsonIgnore
     @NotBlank(message = "A senha do usuário é de preenchimento obrigatório.")
     private String senha;
 
-    @NotNull(message = "O perfil global do usuário é de preenchimento obrigatório.")
-    private PerfilGlobalEnum perfilGlobal;
+    @NotNull(message = "O(s) perfil(is) do usuário é de preenchimento obrigatório.")
+    private List<PerfilUsuarioDTO> perfisUsuario;
 
     private StatusHomologacaoEnum statusHomologacao;
 
