@@ -1,5 +1,5 @@
 <!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
-<jasperReport name="PlanoDeAula" language="java" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="16" bottomMargin="24" uuid="09d5238b-f29c-4e76-b6df-9df492fccc04">
+<jasperReport name="PlanoDeAula" language="groovy" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="16" bottomMargin="24" uuid="09d5238b-f29c-4e76-b6df-9df492fccc04">
 	<parameter name="LOGO_INSTITUICAO" class="java.io.InputStream"/>
 	<parameter name="NOME_INSTITUICAO" class="java.lang.String">
 		<defaultValueExpression><![CDATA["[ Nome da Instituição ]"]]></defaultValueExpression>
@@ -42,12 +42,13 @@
 	<field name="duracao" class="java.lang.String"/>
 	<field name="componentesCurriculares" class="java.lang.String"/>
 	<field name="anosIndicados" class="java.lang.String"/>
-	<field name="habilidadeBncc" class="java.lang.String"/>
+	<field name="habilidadeBncc" class="java.util.List"/>
 	<field name="tituloPlano" class="java.lang.String"/>
 	<field name="resumoPlano" class="java.lang.String"/>
 	<field name="metodologia" class="java.lang.String"/>
 	<field name="criteriosAvaliacao" class="java.lang.String"/>
 	<field name="materiaisNecessarios" class="java.lang.String"/>
+	<field name="nomeInstituicao" class="java.lang.String"/>
 	<title height="120" splitType="Prevent">
 		<element kind="rectangle" uuid="885c7233-ef21-4c62-81ce-7272139f3625" mode="Opaque" x="10" y="0" width="165" height="56" backcolor="#ECFDF5">
 			<printWhenExpression><![CDATA[$P{LOGO_INSTITUICAO} == null]]></printWhenExpression>
@@ -62,7 +63,7 @@
 			<expression><![CDATA[$P{LOGO_INSTITUICAO}]]></expression>
 		</element>
 		<element kind="textField" uuid="1474b9ae-a2bb-4789-a8fe-ab194489b868" x="186" y="24" width="329" height="14" forecolor="#0F172A" fontName="SansSerif" fontSize="11.0" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" blankWhenNull="true" bold="true">
-			<expression><![CDATA[$P{NOME_INSTITUICAO}]]></expression>
+			<expression><![CDATA[$F{nomeInstituicao} == null ? "" : $F{nomeInstituicao}]]></expression>
 		</element>
 		<element kind="line" uuid="af552981-c6df-4bf6-a67e-00b4e4f5188b" x="10" y="64" width="505" height="1" forecolor="#10B981">
 			<pen lineWidth="1.5" lineColor="#10B981"/>
@@ -115,7 +116,14 @@
 					<text><![CDATA[HABILIDADE BNCC]]></text>
 				</element>
 				<element kind="textField" uuid="1d50557c-c76c-4b03-9f24-b1c4b9b70ba3" x="361" y="23" width="144" height="13" forecolor="#166534" fontName="SansSerif" fontSize="9.5" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" textAdjust="StretchHeight" blankWhenNull="true" bold="true">
-					<expression><![CDATA[$F{habilidadeBncc}]]></expression>
+					<expression><![CDATA[
+				        $F{habilidadeBncc} == null
+				        ? ""
+				        : ((java.util.List<String>) $F{habilidadeBncc})
+				            .stream()
+				            .map(h -> "• " + h)
+				            .collect(java.util.stream.Collectors.joining("\n"))
+				    ]]></expression>
 				</element>
 				<box>
 					<pen lineWidth="1.0" lineColor="#BBF7D0"/>

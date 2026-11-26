@@ -1,19 +1,15 @@
 package br.edu.ifpe.afogados.desplugai.service;
 
-import br.edu.ifpe.afogados.desplugai.dto.ApiResponseDTO;
-import br.edu.ifpe.afogados.desplugai.dto.HabilidadePlanoDTO;
-import br.edu.ifpe.afogados.desplugai.dto.PlanoAulaDTO;
-import br.edu.ifpe.afogados.desplugai.dto.PlanoAulaFiltroDTO;
-import br.edu.ifpe.afogados.desplugai.entity.HabilidadeBncc;
-import br.edu.ifpe.afogados.desplugai.entity.HabilidadePlano;
-import br.edu.ifpe.afogados.desplugai.entity.PlanoAula;
-import br.edu.ifpe.afogados.desplugai.entity.Usuario;
+import br.edu.ifpe.afogados.desplugai.dto.*;
+import br.edu.ifpe.afogados.desplugai.entity.*;
 import br.edu.ifpe.afogados.desplugai.enums.PlanoAulaOrdenacaoEnum;
 import br.edu.ifpe.afogados.desplugai.enums.StatusPublicacaoEnum;
 import br.edu.ifpe.afogados.desplugai.mapper.PlanoAulaMapper;
 import br.edu.ifpe.afogados.desplugai.repository.*;
 import br.edu.ifpe.afogados.desplugai.specification.PlanoAulaSpecification;
 import jakarta.transaction.Transactional;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,12 +17,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Service
 public class PlanoAulaService {
@@ -36,6 +32,7 @@ public class PlanoAulaService {
     private final HabilidadeBnccRepository habilidadeBnccRepository;
     private final HabilidadePlanoRepository habilidadePlanoRepository;
     private final FavoritoRepository favoritoRepository;
+    private final ProfessorAfiliacaoRepository professorAfiliacaoRepository;
     private final PlanoAulaMapper planoAulaMapper;
 
 
@@ -45,6 +42,7 @@ public class PlanoAulaService {
             HabilidadeBnccRepository habilidadeBnccRepository,
             HabilidadePlanoRepository habilidadePlanoRepository,
             FavoritoRepository favoritoRepository,
+            ProfessorAfiliacaoRepository professorAfiliacaoRepository,
             PlanoAulaMapper planoAulaMapper
     ) {
         this.planoAulaRepository = planoAulaRepository;
@@ -52,6 +50,7 @@ public class PlanoAulaService {
         this.habilidadeBnccRepository = habilidadeBnccRepository;
         this.habilidadePlanoRepository = habilidadePlanoRepository;
         this.favoritoRepository = favoritoRepository;
+        this.professorAfiliacaoRepository = professorAfiliacaoRepository;
         this.planoAulaMapper = planoAulaMapper;
     }
 
@@ -369,4 +368,62 @@ public class PlanoAulaService {
 
         return resultado.map(planoAulaMapper::toDto);
     }
+
+    public byte[] gerarPdf(Long idPlano) {
+        PlanoAula planoAula = planoAulaRepository
+                .findById(idPlano)
+                .orElseThrow(() -> new RuntimeException("Plano de aula não encontrado com ID: " + idPlano));
+
+        PlanoAulaReportDTO dto = new PlanoAulaReportDTO();
+
+        Optional<ProfessorAfiliacao> afiliacao = professorAfiliacaoRepository
+                .findByProfessor_Id(planoAula.getAutor().getId());
+
+        afiliacao.ifPresent(professorAfiliacao -> dto.setNomeInstituicao(
+                professorAfiliacao.getSecretaria().getNome()
+        ));
+
+        dto.setNomeProfessor(planoAula.getAutor().getNome());
+        dto.setDataPlano(planoAula.getDataCriacao().toLocalDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        dto.setDuracao(planoAula.getDuracao());
+        dto.setComponentesCurriculares(planoAula.getComponentesCurriculares());
+        dto.setAnosIndicados(planoAula.getAnosIndicados());
+
+        List<String> habilidades = new ArrayList<>();
+        for(HabilidadePlano habilidade : planoAula.getHabilidadesPlano()) {
+            habilidades.add(habilidade.getHabilidade().getCodigo());
+        }
+        dto.setHabilidadeBncc(habilidades);
+        dto.setTituloPlano(planoAula.getTitulo());
+        dto.setResumoPlano(planoAula.getResumo());
+        dto.setMetodologia(planoAula.getMetodologia());
+        dto.setMateriaisNecessarios(planoAula.getMateriaisNecessarios());
+        dto.setCriteriosAvaliacao(planoAula.getCriteriosAvaliacao());
+
+        JRBeanCollectionDataSource dataSource =
+                new JRBeanCollectionDataSource(Collections.singletonList(dto));
+
+        try (InputStream inputStream = getClass().getResourceAsStream("/reports/planoAula.jrxml")) {
+            if (inputStream == null) {
+                throw new FileNotFoundException("Template '/reports/planoAula.jrxml' não encontrado.");
+            }
+
+            JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
+
+            // Parâmetros do relatório (pode ser usado para dados gerais como logotipo)
+            Map<String, Object> parametros = new HashMap<>();
+
+            JasperPrint jasperPrint = JasperFillManager.fillReport(
+                    jasperReport,
+                    parametros,
+                    dataSource
+            );
+
+            return JasperExportManager.exportReportToPdf(jasperPrint);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao gerar PDF do plano de aula", e);
+        }
+    }
+
 }

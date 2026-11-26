@@ -8,11 +8,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 public class PlanoAulaReportDTO {
 
+    private String nomeInstituicao;
     private String tituloPlano;
     private String nomeProfessor;
     private String dataPlano;
@@ -25,5 +28,5 @@ public class PlanoAulaReportDTO {
     private String materiaisNecessarios;
     private String metodologia;
     private String criteriosAvaliacao;
-    private String habilidadeBncc;
+    private List<String> habilidadeBncc;
 }
